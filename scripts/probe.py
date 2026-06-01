@@ -1,6 +1,7 @@
 """Probe adapter for v0.1: stub. Real implementation lands in v0.3."""
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Protocol
 
 
@@ -10,6 +11,7 @@ class ProbeAdapter(Protocol):
     def query(self, prompt: str, platform: str) -> ProbeResult: ...
 
 
+@dataclass
 class ProbeResult:
     cited: bool
     citation_context: str
