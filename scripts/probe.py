@@ -7,7 +7,7 @@ from typing import Protocol
 class ProbeAdapter(Protocol):
     """Protocol for v0.3 probe implementations."""
 
-    def query(self, prompt: str, platform: str) -> "ProbeResult": ...
+    def query(self, prompt: str, platform: str) -> ProbeResult: ...
 
 
 class ProbeResult:

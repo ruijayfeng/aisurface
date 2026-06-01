@@ -5,8 +5,8 @@ import argparse
 import sys
 from pathlib import Path
 
-from scripts import scanner, critic, github_meta, distribution, report
-from scripts.report import CheckResult, AuditReport
+from scripts import critic, distribution, github_meta, report, scanner
+from scripts.report import AuditReport, CheckResult
 from scripts.scanner import RepoAssets
 
 
@@ -44,27 +44,38 @@ def _structural_checks(assets: RepoAssets) -> list[CheckResult]:
             impact=15,
         )
     )
-    # #7 GitHub topics (heuristic: assume incomplete for now)
+    # #7 GitHub topics — use suggest_topics to count candidates from readme
+    readme_text = _read_readme(assets)
+    suggested_count = len(github_meta.suggest_topics(readme_text, existing=[]))
+    topics_passed = suggested_count >= 8
     results.append(
         CheckResult(
             id=7,
             name="GitHub topics complete (8-12)",
             category="structural",
-            score=5,  # Heuristic; real check needs GitHub API
+            score=10 if topics_passed else (5 if suggested_count >= 4 else 0),
             max_score=10,
-            passed=False,
+            passed=topics_passed,
             impact=5,
         )
     )
-    # #11 Distribution signals (heuristic: 5 default)
+    # #11 Distribution signals — use check_signals with placeholder inputs
+    sig = distribution.check_signals(
+        project_name=assets.root.name,
+        description=readme_text[:200] if readme_text else "",
+        github_stars=0,
+        has_npm=False,
+        has_pypi=False,
+    )
+    dist_passed = sig["score"] >= 6
     results.append(
         CheckResult(
             id=11,
             name="Distribution signals (awesome / npm / PyPI)",
             category="structural",
-            score=5,
+            score=sig["score"],
             max_score=10,
-            passed=False,
+            passed=dist_passed,
             impact=5,
         )
     )
@@ -121,6 +132,10 @@ def run_audit(repo_root: Path) -> AuditReport:
 
 
 def main(argv: list[str] | None = None) -> int:
+    # Reconfigure stdout to UTF-8 for Windows compatibility (emoji glyphs in reports)
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+
     parser = argparse.ArgumentParser(
         prog="aisurface",
         description="Audit a repo for AI-search citation readiness.",
