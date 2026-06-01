@@ -1,6 +1,8 @@
 """Detect and inventory GEO-relevant files in a project repository."""
 from __future__ import annotations
 
+import fnmatch
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -22,11 +24,16 @@ IGNORE_DIRS = {
 
 
 def _iter_relevant_files(root: Path, pattern: str):
-    """Yield files matching `pattern` under `root`, skipping common ignore dirs."""
-    for path in root.rglob(pattern):
-        if any(part in IGNORE_DIRS for part in path.parts):
-            continue
-        yield path
+    """Yield files matching `pattern` under `root`, pruning IGNORE_DIRS at walk time."""
+    root = Path(root)
+    if not root.is_dir():
+        return
+    for dirpath, dirs, files in os.walk(root):
+        # Prune in-place: modify dirs list to skip ignored directories
+        dirs[:] = [d for d in dirs if d not in IGNORE_DIRS]
+        for filename in files:
+            if fnmatch.fnmatch(filename, pattern):
+                yield Path(dirpath) / filename
 
 
 @dataclass

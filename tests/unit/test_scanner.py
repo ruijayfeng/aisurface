@@ -72,3 +72,37 @@ def test_scan_ignores_schema_files_in_node_modules(tmp_path):
     assets = scan_repo(tmp_path)
     assert assets.has_schema_org is False
     assert assets.schema_files == []
+
+
+def test_iter_relevant_files_prunes_ignored_dirs(tmp_path):
+    """Verify os.walk receives pruned dirs list, not just post-filter."""
+    import os
+
+    from scripts.scanner import _iter_relevant_files
+
+    # Create a deep node_modules tree
+    (tmp_path / "node_modules" / "vendor" / "deeply" / "nested").mkdir(parents=True)
+    (tmp_path / "node_modules" / "vendor" / "deeply" / "nested" / "schema.json").write_text("{}")
+    (tmp_path / "real.json").write_text("{}")
+
+    # Collect visited dirpaths by monkey-patching os.walk
+    visited = []
+    original_walk = os.walk
+    def tracking_walk(top, **kwargs):
+        for dirpath, dirs, files in original_walk(top, **kwargs):
+            visited.append(dirpath)
+            yield dirpath, dirs, files
+    os.walk = tracking_walk
+    try:
+        results = list(_iter_relevant_files(tmp_path, "*.json"))
+    finally:
+        os.walk = original_walk
+
+    # Result correctness
+    assert len(results) == 1
+    assert results[0].name == "real.json"
+
+    # Pruning correctness: os.walk should never have been called with
+    # a dirpath inside node_modules
+    for dirpath in visited:
+        assert "node_modules" not in Path(dirpath).parts, f"Walked into ignored dir: {dirpath}"
