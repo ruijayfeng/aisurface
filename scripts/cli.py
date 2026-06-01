@@ -163,7 +163,7 @@ def main(argv: list[str] | None = None) -> int:
             "errors": report_obj.errors,
         }, indent=2, ensure_ascii=False))
     else:
-        print(report.render_report(report_obj))
+        print(report.render_report(report_obj, teacher_mode=args.learn))
     return 0
 
 

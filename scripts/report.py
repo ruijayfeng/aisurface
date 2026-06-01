@@ -74,8 +74,31 @@ def _bucket_results(results: list[CheckResult]) -> tuple[list, list, list, int]:
     return must_fix, should_fix, nice, deferred_count
 
 
-def render_report(report: AuditReport) -> str:
-    """Render the audit report as Markdown."""
+def _format_check_line(r: CheckResult, teacher_mode: bool = False) -> str:
+    """Format a check bullet line; optionally append a teacher-mode primer."""
+    # Must-fix style includes impact; should-fix / nice-to-have don't.
+    # We always emit the canonical "name + optional impact" form for consistency,
+    # then optionally add the primer on the next line.
+    base = f"- **{r.name}** (impact +{r.impact}%)"
+    if not teacher_mode:
+        return base
+    # Local import to avoid a hard dependency at module import time and to keep
+    # report.py usable in contexts where concepts.py isn't on the path.
+    from scripts.concepts import get_primer
+    primer = get_primer(r.id)
+    if not primer:
+        return base
+    return f"{base}\n  - _Why this matters: {primer}_"
+
+
+def render_report(report: AuditReport, teacher_mode: bool = False) -> str:
+    """Render the audit report as Markdown.
+
+    Args:
+        report: The audit report to render.
+        teacher_mode: When True, inject a short educational primer after each
+            check's name. Used by `python -m scripts.cli --learn`.
+    """
     score = _compute_health_score(report.results)
     sub_scores = _compute_sub_scores(report.results)
     must_fix, should_fix, nice, deferred_count = _bucket_results(report.results)
@@ -100,7 +123,7 @@ def render_report(report: AuditReport) -> str:
         lines.append("## 🔴 Must-fix")
         lines.append("")
         for r in must_fix:
-            lines.append(f"- **{r.name}** (impact +{r.impact}%)")
+            lines.append(_format_check_line(r, teacher_mode=teacher_mode))
         lines.append("")
 
     # Should-fix section
@@ -108,7 +131,7 @@ def render_report(report: AuditReport) -> str:
         lines.append("## 🟡 Should-fix")
         lines.append("")
         for r in should_fix:
-            lines.append(f"- {r.name}")
+            lines.append(_format_check_line(r, teacher_mode=teacher_mode))
         lines.append("")
 
     # Nice-to-have
@@ -116,7 +139,7 @@ def render_report(report: AuditReport) -> str:
         lines.append("## 🟢 Nice-to-have")
         lines.append("")
         for r in nice:
-            lines.append(f"- {r.name}")
+            lines.append(_format_check_line(r, teacher_mode=teacher_mode))
         lines.append("")
 
     # Deferred checks footer
