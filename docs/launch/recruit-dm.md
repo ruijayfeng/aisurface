@@ -217,10 +217,10 @@ Be honest with yourself before sending — cold outreach ROI is brutal.
 Track responses in a spreadsheet. Recommended path:
 
 ```
-D:\Code\MyProject\aisurface\docs\launch\recruit-pipeline.md
+<your-aisurface-repo>/docs/launch/recruit-pipeline.md
 ```
 
-(Currently a path note — Boss will create the actual tracker when sending DMs. Suggested columns: date_sent, project_name, maintainer, channel, response_status, before_score, after_score, case_study_status, notes.)
+(Create this file in your local clone of the repo when you start sending DMs. Suggested columns: date_sent, project_name, maintainer, channel, response_status, before_score, after_score, case_study_status, notes.)
 
 ### Suggested tracker schema
 
