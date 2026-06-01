@@ -58,8 +58,8 @@ It outputs a report: 12 checks, Health score (0-100), 🔴 Must-fix list.
 
 We use [ruijayfeng/ziwei](https://github.com/ruijayfeng/ziwei) for dogfooding:
 
-- **before**: 7 🔴 failures, health score 42/100
-- **after** (one week after running aisurface): 0 🔴, health score 90+/100
+- **before**: health score 35/100, 5 🔴 Must-fix items
+- **after** (~30 minutes: run audit + apply 5 must-fixes): health score 66/100, all 🔴 cleared
 
 See [case-studies/ziwei-before-after.md](./case-studies/ziwei-before-after.md).
 

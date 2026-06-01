@@ -58,8 +58,8 @@ aisurface .
 
 我们用 [ruijayfeng/ziwei](https://github.com/ruijayfeng/ziwei) 做 dogfooding：
 
-- **before**: 7 项 🔴 失败，health score 42/100
-- **after** (跑完 aisurface 一周后): 0 项 🔴，health score 90+/100
+- **before**: health score 35/100，5 项 🔴 Must-fix
+- **after**（约 30 分钟，跑了 audit + 补完 5 项 Must-fix）: health score 66/100，🔴 全部清零
 
 详见 [case-studies/ziwei-before-after.md](./case-studies/ziwei-before-after.md)。
 
