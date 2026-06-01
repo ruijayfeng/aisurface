@@ -73,6 +73,36 @@ def build_organization(
     return schema
 
 
+def build_website(name: str, url: str, description: str | None = None) -> dict[str, Any]:
+    """Build a WebSite schema.org entity."""
+    schema: dict[str, Any] = {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": name,
+        "url": url,
+    }
+    if description:
+        schema["description"] = description
+    return schema
+
+
+def build_breadcrumb_list(items: list[dict[str, str]]) -> dict[str, Any]:
+    """Build a BreadcrumbList schema. Each item: {name, item}."""
+    return {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": idx + 1,
+                "name": item["name"],
+                "item": item["item"],
+            }
+            for idx, item in enumerate(items)
+        ],
+    }
+
+
 # Minimal required-field checks for v0.1's 5 types
 REQUIRED_FIELDS = {
     "SoftwareApplication": ["name", "description", "url"],

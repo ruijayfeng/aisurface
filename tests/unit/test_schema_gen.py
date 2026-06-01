@@ -1,7 +1,9 @@
 from scripts.schema_gen import (
+    build_breadcrumb_list,
     build_faq_page,
     build_organization,
     build_software_application,
+    build_website,
     validate_schema,
 )
 
@@ -57,6 +59,39 @@ def test_build_organization():
     assert schema["sameAs"] == ["https://github.com/acme"]
 
 
+def test_build_website_minimal():
+    schema = build_website(name="my-site", url="https://example.com")
+    assert schema["@context"] == "https://schema.org"
+    assert schema["@type"] == "WebSite"
+    assert schema["name"] == "my-site"
+    assert schema["url"] == "https://example.com"
+    assert "description" not in schema
+
+
+def test_build_website_with_description():
+    schema = build_website(
+        name="my-site",
+        url="https://example.com",
+        description="A test site",
+    )
+    assert schema["description"] == "A test site"
+
+
+def test_build_breadcrumb_list():
+    schema = build_breadcrumb_list(
+        items=[
+            {"name": "Home", "item": "https://example.com"},
+            {"name": "Docs", "item": "https://example.com/docs"},
+        ]
+    )
+    assert schema["@type"] == "BreadcrumbList"
+    assert len(schema["itemListElement"]) == 2
+    assert schema["itemListElement"][0]["position"] == 1
+    assert schema["itemListElement"][0]["name"] == "Home"
+    assert schema["itemListElement"][0]["@type"] == "ListItem"
+    assert schema["itemListElement"][1]["position"] == 2
+
+
 def test_validate_schema_valid():
     schema = build_software_application(
         name="x", description="d", url="https://x.com"
@@ -67,3 +102,13 @@ def test_validate_schema_valid():
 def test_validate_schema_missing_required():
     errors = validate_schema({"@type": "SoftwareApplication", "name": "x"})
     assert len(errors) > 0
+
+
+def test_validate_schema_website_missing_url():
+    errors = validate_schema({"@type": "WebSite", "name": "x"})
+    assert any("url" in e for e in errors)
+
+
+def test_validate_schema_breadcrumb_list_missing_items():
+    errors = validate_schema({"@type": "BreadcrumbList", "name": "x"})
+    assert any("itemListElement" in e for e in errors)
