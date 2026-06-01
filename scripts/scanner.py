@@ -5,13 +5,28 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 PROJECT_MARKERS = {
-    "node": ["package.json"],
-    "python": ["pyproject.toml", "setup.py", "requirements.txt"],
-    "go": ["go.mod"],
-    "rust": ["Cargo.toml"],
     "nextjs": ["next.config.js", "next.config.ts", "next.config.mjs"],
     "vite": ["vite.config.js", "vite.config.ts"],
+    "rust": ["Cargo.toml"],
+    "go": ["go.mod"],
+    "python": ["pyproject.toml", "setup.py", "requirements.txt"],
+    "node": ["package.json"],
 }
+
+IGNORE_DIRS = {
+    "node_modules", ".git", ".venv", "venv", "env",
+    "__pycache__", "dist", "build", ".next", ".nuxt",
+    "target", ".pytest_cache", ".ruff_cache", ".mypy_cache",
+    "coverage", "htmlcov", ".tox",
+}
+
+
+def _iter_relevant_files(root: Path, pattern: str):
+    """Yield files matching `pattern` under `root`, skipping common ignore dirs."""
+    for path in root.rglob(pattern):
+        if any(part in IGNORE_DIRS for part in path.parts):
+            continue
+        yield path
 
 
 @dataclass
@@ -71,7 +86,7 @@ def scan_repo(root: Path) -> RepoAssets:
 
     docs_dir = root / "docs"
     if docs_dir.is_dir():
-        assets.docs_files = sorted(docs_dir.rglob("*.md"))
+        assets.docs_files = sorted(_iter_relevant_files(docs_dir, "*.md"))
 
     wk_dir = root / ".well-known"
     if wk_dir.is_dir():
@@ -79,7 +94,7 @@ def scan_repo(root: Path) -> RepoAssets:
         assets.has_llms_txt = (wk_dir / "llms.txt").exists()
 
     for pattern in ("*.schema.json", "*.schema.jsonld"):
-        assets.schema_files.extend(root.rglob(pattern))
+        assets.schema_files.extend(_iter_relevant_files(root, pattern))
     assets.has_schema_org = len(assets.schema_files) > 0
 
     return assets
