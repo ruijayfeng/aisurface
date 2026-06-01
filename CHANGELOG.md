@@ -18,3 +18,8 @@
 - 推特 thread: `docs/launch/twitter.md`
 - Recruit DM template: `docs/launch/recruit-dm.md`
 - Launch index: `docs/launch/README.md`
+
+### Operations
+- Issue triage runbook: `docs/process/TRIAGE.md`
+- Monthly platform update runbook: `docs/process/PLATFORM-UPDATE-RUNBOOK.md`
+- GitHub Discussions setup steps: `docs/process/STATE-DISCUSSION-SETUP.md`
