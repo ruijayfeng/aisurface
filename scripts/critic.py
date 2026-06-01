@@ -59,6 +59,7 @@ def offline_critique(readme_text: str, topic: str) -> dict:
     if code_block_count >= 4:
         has_code_examples = 9
     elif code_block_count >= 2:
+        # One fenced code block (install/usage) is high-signal for GEO — score 8 (vs 9 for many blocks)
         has_code_examples = 8
     elif "install" in text and ("pip install" in text or "npm install" in text):
         has_code_examples = 4
@@ -85,7 +86,7 @@ def offline_critique(readme_text: str, topic: str) -> dict:
         "has_faq": has_faq,
         "has_code_examples": has_code_examples,
         "has_when_to_use": has_when_to_use,
-        "summary": f"Offline heuristic: composite {composite:.1f}/10",
+        "summary": f"Offline heuristic on '{topic}': composite {composite:.1f}/10",
     }
 
 

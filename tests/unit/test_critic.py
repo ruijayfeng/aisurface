@@ -10,6 +10,16 @@ def test_offline_critique_scores_readme_quality():
     assert 0 <= result["has_faq"] <= 10
     assert 0 <= result["has_code_examples"] <= 10
     assert "would_cite" in result
+    # Test readme has "## Install" + "pip install" — code example branch should fire
+    assert result["has_code_examples"] >= 4
+    # Test readme's first paragraph is "A fast CLI for parsing Markdown." (35 chars, no problem keywords)
+    # and doesn't contain superlatives. Base score 5, "fast" keyword gives +2.
+    assert result["problem_clarity"] == 7
+    # No FAQ section, no code examples >= 2 fences, no "when to use" — these are all 0
+    assert result["has_faq"] == 0
+    assert result["has_when_to_use"] == 0
+    # topic is now in the summary
+    assert "CLI tool" in result["summary"]
 
 
 def test_offline_critique_detects_faq():
