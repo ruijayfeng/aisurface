@@ -54,7 +54,8 @@ def check_signals(
         actions.append("Publish to a package registry (npm or PyPI)")
 
     # Description quality heuristic (max 2)
-    if len(description) >= 50 and "open-source" in description.lower() or "self-host" in description.lower():
+    desc_lower = description.lower()
+    if len(description) >= 50 and ("open-source" in desc_lower or "self-host" in desc_lower):
         score += 2
     elif len(description) >= 30:
         score += 1
