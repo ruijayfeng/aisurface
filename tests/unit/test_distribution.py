@@ -10,7 +10,7 @@ def test_check_signals_no_signals():
         has_pypi=False,
     )
     assert result["score"] <= 3
-    assert "low_visibility" in result["notes"].lower() or "low stars" in result["notes"].lower()
+    assert "low stars" in result["notes"].lower()
 
 
 def test_check_signals_strong_signals():

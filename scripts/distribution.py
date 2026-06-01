@@ -44,13 +44,9 @@ def check_signals(
         notes.append("low stars (<10)")
 
     # Package registries (max 3)
-    if has_npm:
-        score += 1
-    if has_pypi:
-        score += 1
-    if has_npm or has_pypi:
-        score += 1
-    else:
+    registry_count = int(has_npm) + int(has_pypi)
+    score += registry_count + (1 if registry_count > 0 else 0)
+    if registry_count == 0:
         actions.append("Publish to a package registry (npm or PyPI)")
 
     # Description quality heuristic (max 2)
@@ -63,7 +59,7 @@ def check_signals(
         actions.append("Improve GitHub description (longer, more specific)")
 
     if score < 6:
-        actions.append(f"Consider submitting to awesome lists (e.g. {AWESOME_LISTS[0]})")
+        actions.append(f"Consider submitting {project_name} to awesome lists (e.g. {AWESOME_LISTS[0]})")
 
     return CheckResult(
         score=min(10, score),
