@@ -13,7 +13,7 @@ AWESOME_LISTS = [
 ]
 
 
-class CheckResult(TypedDict):
+class DistributionResult(TypedDict):
     score: int
     notes: str
     recommended_actions: list[str]
@@ -25,7 +25,7 @@ def check_signals(
     github_stars: int,
     has_npm: bool,
     has_pypi: bool,
-) -> CheckResult:
+) -> DistributionResult:
     """Score 0-10 the project's distribution signals."""
     score = 0
     actions: list[str] = []
@@ -61,7 +61,7 @@ def check_signals(
     if score < 6:
         actions.append(f"Consider submitting {project_name} to awesome lists (e.g. {AWESOME_LISTS[0]})")
 
-    return CheckResult(
+    return DistributionResult(
         score=min(10, score),
         notes="; ".join(notes) if notes else "OK",
         recommended_actions=actions,

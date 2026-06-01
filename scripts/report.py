@@ -4,6 +4,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 SUB_SCORE_MAX = 100
+MAX_MUST_FIX = 5
+MAX_SHOULD_FIX = 5
 
 # Map CheckResult.category to user-facing sub-score labels
 CATEGORY_LABELS = {
@@ -38,7 +40,7 @@ def _compute_health_score(results: list[CheckResult]) -> int:
     total_max = sum(r.max_score for r in results)
     if total_max == 0:
         return 0
-    return round(total / total_max * 100)
+    return round(total / total_max * SUB_SCORE_MAX)
 
 
 def _compute_sub_scores(results: list[CheckResult]) -> list[tuple[str, int]]:
@@ -55,27 +57,28 @@ def _compute_sub_scores(results: list[CheckResult]) -> list[tuple[str, int]]:
         if total_max == 0:
             continue
         label = CATEGORY_LABELS.get(category, category.title())
-        sub_scores.append((label, round(total / total_max * 100)))
-    return sub_scores
+        sub_scores.append((label, round(total / total_max * SUB_SCORE_MAX)))
+    return sorted(sub_scores, key=lambda x: x[0])
 
 
-def _bucket_results(results: list[CheckResult]) -> tuple[list, list, list]:
-    """Sort into 🔴 must-fix, 🟡 should-fix, 🟢 nice-to-have."""
+def _bucket_results(results: list[CheckResult]) -> tuple[list, list, list, int]:
+    """Sort into 🔴 must-fix, 🟡 should-fix, 🟢 nice-to-have, and a deferred count."""
     failed = sorted(
         [r for r in results if not r.passed],
         key=lambda r: -r.impact,
     )
-    must_fix = failed[:5]
-    should_fix = failed[5:10]
+    must_fix = failed[:MAX_MUST_FIX]
+    should_fix = failed[MAX_MUST_FIX:MAX_MUST_FIX + MAX_SHOULD_FIX]
     nice = [r for r in results if r.passed and r.score < r.max_score]
-    return must_fix, should_fix, nice
+    deferred_count = len(failed) - len(must_fix) - len(should_fix)
+    return must_fix, should_fix, nice, deferred_count
 
 
 def render_report(report: AuditReport) -> str:
     """Render the audit report as Markdown."""
     score = _compute_health_score(report.results)
     sub_scores = _compute_sub_scores(report.results)
-    must_fix, should_fix, nice = _bucket_results(report.results)
+    must_fix, should_fix, nice, deferred_count = _bucket_results(report.results)
 
     lines: list[str] = [
         f"# GEO Audit Report: {report.project_name}",
@@ -89,7 +92,7 @@ def render_report(report: AuditReport) -> str:
         lines.append("## Sub-scores")
         lines.append("")
         for label, sub in sub_scores:
-            lines.append(f"- **{label}**: {sub} / 100")
+            lines.append(f"- **{label}**: {sub} / {SUB_SCORE_MAX}")
         lines.append("")
 
     # Must-fix section
@@ -114,6 +117,11 @@ def render_report(report: AuditReport) -> str:
         lines.append("")
         for r in nice:
             lines.append(f"- {r.name}")
+        lines.append("")
+
+    # Deferred checks footer
+    if deferred_count > 0:
+        lines.append(f"_...and {deferred_count} more failed checks not shown._")
         lines.append("")
 
     # Skipped checks
