@@ -28,8 +28,11 @@ def test_suggest_topics_caps_at_12():
 def test_evaluate_description_good():
     desc = "A fast, open-source CLI tool that converts Markdown to HTML with 50+ themes."
     score, notes = evaluate_description(desc)
-    assert score >= 7
-    assert "length" in notes.lower() or "specific" in notes.lower()
+    assert score == 10
+    assert "length" in notes.lower()
+    assert "vague" not in notes.lower()
+    assert "short" not in notes.lower()
+    assert "long" not in notes.lower()
 
 
 def test_evaluate_description_too_short():

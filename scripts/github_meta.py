@@ -11,7 +11,7 @@ TOPIC_SUGGESTIONS: dict[str, list[str]] = {
     "react": ["react", "reactjs", "nextjs", "next.js"],
     "vue": ["vue", "vuejs", "nuxt"],
     "rust": ["rust", "cargo", "rustlang"],
-    "go": ["golang", " go "],
+    "go": ["golang"],
     "cli": ["cli", "command-line", "commandline", "terminal"],
     "api": ["api", "rest", "graphql", "endpoint"],
     "markdown": ["markdown", "md", "commonmark"],
@@ -76,12 +76,6 @@ def evaluate_description(desc: str) -> tuple[int, str]:
     superlatives = {"best", "amazing", "awesome", "ultimate"}
     if words & superlatives:
         score -= 1
-
-    # Bonus for specificity (numbers, version)
-    if re.search(r"\d", desc):
-        score += 0  # neutral, doesn't help
-    if any(kw in desc.lower() for kw in ["open-source", "self-host", "cli", "api", "library"]):
-        score += 0  # neutral
 
     notes = "OK" if not issues else "; ".join(issues)
     return max(0, min(10, score)), notes
