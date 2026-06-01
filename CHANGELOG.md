@@ -10,3 +10,11 @@
 - 3 eval fixtures: bad-readme-python-lib, good-schema-nextjs-docs, minimal-cli-tool
 - Bilingual README (zh + en)
 - Case study: ruijayfeng/ziwei before/after
+
+### Launch Materials
+- Show HN draft: `docs/launch/show-hn.md`
+- 即刻 post: `docs/launch/jike.md`
+- 掘金 article: `docs/launch/juejin.md`
+- 推特 thread: `docs/launch/twitter.md`
+- Recruit DM template: `docs/launch/recruit-dm.md`
+- Launch index: `docs/launch/README.md`
