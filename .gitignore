@@ -218,3 +218,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Internal release handoff (kept local, not committed)
+RELEASE_HANDOFF.md
