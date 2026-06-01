@@ -1,0 +1,9 @@
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "my-docs",
+  "description": "A modern documentation framework for JavaScript projects",
+  "url": "https://my-docs.example.com",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Cross-platform"
+}

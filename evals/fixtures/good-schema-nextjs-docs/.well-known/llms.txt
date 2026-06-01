@@ -1,0 +1,20 @@
+# my-docs
+
+> A modern documentation framework for JavaScript projects. Built on Next.js 14 with full-text search and zero-config deployment.
+
+## Project details
+
+- Language: JavaScript
+- License: MIT
+- Framework: Next.js 14
+
+## Docs
+
+- [Documentation](/docs/)
+- [Getting started](/docs/getting-started)
+- [API reference](/docs/api)
+
+## Optional
+
+- [GitHub repo](https://github.com/example/my-docs)
+- [Blog](/blog/)
