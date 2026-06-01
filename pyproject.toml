@@ -1,0 +1,47 @@
+[project]
+name = "aisurface"
+version = "0.1.0"
+description = "Make your open-source project surface in AI search results"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Jay Feng" }]
+keywords = ["seo", "geo", "ai-search", "open-source", "llm", "citation"]
+dependencies = [
+    "httpx>=0.27",
+    "jsonschema>=4.21",
+    "selectolax>=0.3.21",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-mock>=3.12",
+    "pytest-cov>=5.0",
+    "ruff>=0.5",
+]
+
+[project.scripts]
+aisurface = "scripts.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["scripts"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "SIM"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+markers = [
+    "eval: marks eval tests (deselect with '-m \"not eval\"')",
+]

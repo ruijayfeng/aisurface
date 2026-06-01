@@ -1,0 +1,22 @@
+# Normalize line endings to LF (cross-platform consistency)
+* text=auto eol=lf
+
+# Python source must use LF
+*.py text eol=lf
+*.pyi text eol=lf
+
+# YAML, TOML, Markdown
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.md text eol=lf
+
+# Shell scripts need LF (not CRLF on Windows)
+*.sh text eol=lf
+
+# Binary by default
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.pdf binary
