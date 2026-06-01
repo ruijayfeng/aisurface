@@ -22,7 +22,7 @@ Examples of unacceptable behavior:
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at [INSERT EMAIL]. All complaints will be reviewed and investigated.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at `conduct@ruijayfeng.com` or via [GitHub Issues](https://github.com/ruijayfeng/aisurface/issues). All complaints will be reviewed and investigated.
 
 ## Attribution
 
