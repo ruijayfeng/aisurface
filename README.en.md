@@ -1,0 +1,79 @@
+# aisurface
+
+> Make your open-source project surface in AI search results.
+
+[English](./README.en.md) | [中文](./README.md)
+
+aisurface is a collection of Claude Code skills that helps **open-source project maintainers** get their projects **actively cited by AI search** (Doubao / DeepSeek / ChatGPT / Gemini / Claude / Perplexity / Kimi / Wenxin / Tongyi / GLM / ...).
+
+## Why aisurface?
+
+In 2026, developers don't Google "Python Markdown parser library" — they ask ChatGPT "recommend a Python Markdown parser library."
+
+AI cites only 3-5 sources. **If your project isn't in those 3-5, you don't exist to AI users.**
+
+Existing skills (`seo-audit`, `seo-geo`) only diagnose URL-perspective English Google SEO, not open-source projects, not Chinese AI. aisurface fills that gap.
+
+## Installation
+
+```bash
+# Flagship: repo audit
+npx skills add ruijayfeng/aisurface@audit
+
+# Sub-skill: README optimization
+npx skills add ruijayfeng/aisurface@readme
+
+# Sub-skill: generate llms.txt
+npx skills add ruijayfeng/aisurface@llms-txt
+```
+
+## Quick start
+
+Run from your open-source project root:
+
+```bash
+aisurface .
+```
+
+It outputs a report: 12 checks, Health score (0-100), 🔴 Must-fix list.
+
+## 12-check audit
+
+| # | Check | Type |
+|---|---|---|
+| 1 | README problem statement | Semantic |
+| 2 | README FAQ section | Semantic |
+| 3 | README when to use / not to use | Semantic |
+| 4 | README runnable code examples | Semantic |
+| 5 | Schema.org markup | Structural |
+| 6 | `.well-known/llms.txt` | Structural |
+| 7 | GitHub topics complete (8-12) | Structural |
+| 8 | GitHub description clarity | Semantic |
+| 9 | `docs/` has FAQ page | Semantic |
+| 10 | `docs/` has comparison page | Semantic |
+| 11 | Distribution signals (awesome / npm / PyPI) | Structural |
+| 12 | Original citable content | Semantic |
+
+## Case study
+
+We use [ruijayfeng/ziwei](https://github.com/ruijayfeng/ziwei) for dogfooding:
+
+- **before**: 7 🔴 failures, health score 42/100
+- **after** (one week after running aisurface): 0 🔴, health score 90+/100
+
+See [case-studies/ziwei-before-after.md](./case-studies/ziwei-before-after.md).
+
+## Roadmap
+
+- **v0.1** (W6 release): `audit` + `readme` + `llms-txt` (3 skills)
+- **v0.2** (W13): + `aisurface@schema` + `aisurface@docs` + `aisurface@landing-page`
+- **v0.3** (W25): + `aisurface@probe` (AI platform API verification)
+- **v0.4+**: MCP server, IDE integration
+
+## Contributing
+
+Issues / PRs / case studies welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+## License
+
+MIT
