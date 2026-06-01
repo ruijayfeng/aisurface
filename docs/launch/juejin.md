@@ -133,23 +133,25 @@ aisurface 有两个运行模式，对应两种用户。
 
 ---
 
-### 六、代码：scanner / critic / report 怎么协同
+### 六、代码：4 个模块怎么协同
 
-技术栈：Python 3.10+、标准库为主、零外部 LLM 依赖（v0.1）。
+技术栈：Python 3.10+、标准库为主、零外部 LLM 依赖（v0.1），单文件 ≤ 800 行。
 
-核心是 3 个模块的协同：
+4 个核心模块：
 
-**`scripts/scanner.py`：** 跑结构层 4 项检查。本地文件读取 + GitHub API（用环境变量 `GITHUB_TOKEN`，无 token 时降级到 `gh api` CLI）。输出 `StructuralFinding` dataclass 列表。
+**`scripts/scanner.py`：** 跑结构层 4 项检查。纯本地文件读取——扫 `README.md`、扫 `.well-known/` 目录、查 `package.json`/`pyproject.toml` 里的分发信号、收集 `*.schema.json` 文件。零网络调用，零 LLM。输出 `RepoAssets` dataclass。
 
-**`scripts/critic.py`：** 跑语义层 8 项检查。v0.1 用离线启发式（关键词 + 章节标题匹配 + README 字数），未来 v0.3 接 LLM。所有检查都包在 `safe_check()` 装饰器里，单个失败不会让整次审计崩。
+**`scripts/critic.py`：** 跑语义层 4 项检查（#1-#4）。v0.1 用离线启发式（关键词匹配 + 章节标题识别 + 代码块计数 + 首段长度）。`offline_critique(readme, topic)` 返回 dict，里面有 `problem_clarity`、`has_faq`、`has_code_examples`、`has_when_to_use` 四个 0-10 分。v0.3 会接真实 LLM，但 v0.1 离线版跑得很准。
 
-**`scripts/report.py`：** 拿 scanner 和 critic 的输出，按 score 算法（每个 🔴 -10，🟡 -5，🟢 -2）算出 0-100 分，渲染成 Markdown。
+**`scripts/cli.py`：** 编排器。`_structural_checks(assets)` 跑 #5/#6/#7/#11， `_semantic_checks(assets)` 跑 #1-#4（用 critic）+ #8/#9/#10/#12（用 4 个新加的纯 regex 启发式：FAQ 标题、When to use 章节、含数字/代码/命名实体的"可引用"段、README 里点了名的 AI 搜索平台数）。所有结果都包装成 `CheckResult` dataclass（`id`/`name`/`category`/`score`/`max_score`/`passed`/`impact`），不需要单独的 `StructuralFinding` 类型——结构层和语义层用同一个 dataclass，靠 `category` 字段区分。
 
-**`scripts/cli.py`：** 入口，参数解析（`--learn` / `--patch` / `--json`），错误处理，print 到 stdout。
+**`scripts/report.py`：** 拿 `AuditReport` 渲染 Markdown。算法很简单：`_compute_health_score` 把所有 `score / max_score` 加权求平均，再乘 100 归一到 0-100（不是 -10/-5/-2 那种惩罚制）。失败的检查按 `impact` 排序，前 5 进 🔴 Must-fix，接下来 5 进 🟡 Should-fix，剩下的进 🟢 Nice-to-have。超过 10 项的失败折叠成脚注。
 
-`scanner` 和 `critic` 完全解耦，所以未来加新检查项（比如 v0.2 的 `aisurface@schema` 和 `aisurface@docs` 子 skill）只需要新增一个 `*_check.py` 文件并在 orchestrator 里注册。
+**`scripts/concepts.py`：** v0.1 新加的。`--learn` 教师模式的数据源，12 个 check 各自一条 1-2 句的概念解释。
 
-测试方面，3 个 eval fixture：`bad-readme-python-lib`（标准 0 分项目）、`good-schema-nextjs-docs`（标准高分项目）、`minimal-cli-tool`（边界 case）。CI 跑 49 个测试 + `ruff check`，0.81 秒过完。
+入口参数目前只支持 `--learn` 和 `--json`。`--patch`（生成 unified diff）会在 v0.1.1 加。v0.1 的检查全部是确定性的，没有需要容错的随机源，所以也没有 try/except 包裹每一项检查。
+
+测试方面，3 个 eval fixture：`bad-readme-python-lib`（标准低分项目）、`good-schema-nextjs-docs`（标准高分项目）、`minimal-cli-tool`（边界 case）。CI 跑 49 个测试 + `ruff check`，0.6 秒过完。
 
 ---
 
@@ -160,6 +162,12 @@ v0.1 是"看见问题"，v0.3 是"验证修复"。
 probe 的设想：拿 10 个真实 query（"推荐一个 Python Markdown 解析库"、"做一个 React 紫微斗数 app 需要什么"），同时打 ChatGPT API、Perplexity API、DeepSeek API、豆包 API，看 AI 怎么引用你的项目。如果引用了，记录引用位置和上下文；如果没引用，记录竞品被谁引用、用的什么内容。
 
 这是真正意义上的闭环：从审计建议、到代码修复、到 AI 真实引用的端到端验证。
+
+v0.3 还会顺手做：
+- `--patch` 标志：基于 audit 结果生成 unified diff，让用户能 `git apply` 直接落地
+- LLM 调用容错：v0.1 全部离线启发式，没这个需求；v0.3 接真实 LLM 后，会给每个 LLM 调用包容错，单 provider 失败不会让整次审计崩，方便切换不同 LLM provider
+- `GITHUB_TOKEN` 环境变量支持：scanner 里没接真实 GitHub API（v0.1 只用本地文件），v0.3 加上后能做"audit 当前 repo 的真实 GitHub 元数据"（stars / topics / description），输出和现在 `distribution.check_signals(github_stars=0)` 占位的结果会差很多
+- 加权 health score（结构 40 / 语义 30 / 分布 20 / 平台覆盖 10），而不是现在各组等权
 
 中间的 v0.2 计划：把 `aisurface@audit` 拆成更细的子 skill——`@schema`（专门 Schema.org 标记）、`@docs`（专门 docs/ 目录结构）、`@landing-page`（专门项目主页）。每个子 skill 可以独立安装、独立升级。
 
