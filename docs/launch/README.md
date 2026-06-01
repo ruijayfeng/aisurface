@@ -73,4 +73,3 @@ The plan file at `D:\Code\MyProject\SkillsCreate\InitSkill\docs\superpowers\plan
 - **Source spec:** [`docs/superpowers/specs/2026-06-01-aisurface-design.md`](../../../../SkillsCreate/InitSkill/docs/superpowers/specs/2026-06-01-aisurface-design.md)
 - **Source plan:** [`docs/superpowers/plans/2026-06-01-aisurface.md`](../../../../SkillsCreate/InitSkill/docs/superpowers/plans/2026-06-01-aisurface.md) (lines 2995-3125)
 - **Case study:** [`case-studies/ziwei-before-after.md`](../../case-studies/ziwei-before-after.md)
-- **Release handoff:** [`RELEASE_HANDOFF.md`](../../RELEASE_HANDOFF.md)

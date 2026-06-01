@@ -30,5 +30,4 @@ Internal runbooks Boss follows after the v0.1.0 launch. These are **operational 
 ## Cross-references
 
 - **CHANGELOG.md** — `## [0.1.0] - 2026-07-15` → `### Operations` subsection lists these runbooks
-- **RELEASE_HANDOFF.md** — pre-launch counterpart to this directory
 - **references/ai-search-platforms.md** — the file the monthly platform runbook updates
