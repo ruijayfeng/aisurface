@@ -28,11 +28,11 @@ aisurface .
 | 5 | Schema.org markup on website | Structural (Python) |
 | 6 | `.well-known/llms.txt` present | Structural (Python) |
 | 7 | GitHub topics complete (8-12) | Structural (GitHub API) |
-| 8 | GitHub description clarity | Semantic (LLM critic) |
-| 9 | docs/ has FAQ page | Semantic (LLM critic) |
-| 10 | docs/ has comparison/alternatives | Semantic (LLM critic) |
+| 8 | FAQ section heading in README | Semantic (heuristic) |
+| 9 | When to use / not to use in README | Semantic (heuristic) |
+| 10 | Citation-worthy content | Semantic (heuristic) |
 | 11 | Distribution signals | Structural (heuristic) |
-| 12 | Original citable content | Semantic (LLM critic) |
+| 12 | AI search platforms named in README | Semantic (heuristic) |
 
 ## Modes
 

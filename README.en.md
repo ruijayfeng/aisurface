@@ -48,11 +48,11 @@ It outputs a report: 12 checks, Health score (0-100), 🔴 Must-fix list.
 | 5 | Schema.org markup | Structural |
 | 6 | `.well-known/llms.txt` | Structural |
 | 7 | GitHub topics complete (8-12) | Structural |
-| 8 | GitHub description clarity | Semantic |
-| 9 | `docs/` has FAQ page | Semantic |
-| 10 | `docs/` has comparison page | Semantic |
+| 8 | FAQ section heading in README | Semantic |
+| 9 | When to use / not to use in README | Semantic |
+| 10 | Citation-worthy content (numbers / code / named entities) | Semantic |
 | 11 | Distribution signals (awesome / npm / PyPI) | Structural |
-| 12 | Original citable content | Semantic |
+| 12 | AI search platforms named in README | Semantic |
 
 ## Case study
 

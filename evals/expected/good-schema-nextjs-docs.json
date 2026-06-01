@@ -67,32 +67,32 @@
     },
     {
       "id": 8,
-      "name": "GitHub description clarity",
-      "score": 5,
+      "name": "FAQ section in README",
+      "score": 10,
       "max_score": 10,
-      "passed": false,
+      "passed": true,
       "impact": 5
     },
     {
       "id": 9,
-      "name": "docs/ has FAQ page",
-      "score": 5,
+      "name": "When to use / not to use in README",
+      "score": 10,
       "max_score": 10,
-      "passed": false,
+      "passed": true,
       "impact": 8
     },
     {
       "id": 10,
-      "name": "docs/ has comparison/alternatives",
-      "score": 5,
+      "name": "Citation-worthy content",
+      "score": 10,
       "max_score": 10,
-      "passed": false,
+      "passed": true,
       "impact": 8
     },
     {
       "id": 12,
-      "name": "Original citable content",
-      "score": 5,
+      "name": "AI platform coverage in README",
+      "score": 0,
       "max_score": 10,
       "passed": false,
       "impact": 10

@@ -48,11 +48,11 @@ aisurface .
 | 5 | Schema.org 标记 | 结构 |
 | 6 | `.well-known/llms.txt` | 结构 |
 | 7 | GitHub topics 完整（8-12 个）| 结构 |
-| 8 | GitHub description 清晰 | 语义 |
-| 9 | `docs/` 有 FAQ 页面 | 语义 |
-| 10 | `docs/` 有 comparison 页面 | 语义 |
+| 8 | README 含 FAQ 段标题 | 语义 |
+| 9 | README 含 When to use / not to use 段 | 语义 |
+| 10 | 原创可引用内容（数字 / 代码 / 命名实体）| 语义 |
 | 11 | 分布信号（awesome / npm / PyPI）| 结构 |
-| 12 | 原创可引用内容 | 语义 |
+| 12 | README 提及的 AI 搜索平台数 | 语义 |
 
 ## 实战案例
 
