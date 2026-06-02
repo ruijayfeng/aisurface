@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.0.0] - 2026-06-02
+
+### Added
+- PyPI publish-ready: classifiers + project URLs (hatchling-built wheel, `packages = ["scripts"]`)
+- 3-verb CLI documented in single root SKILL.md
+- `case-studies/ziwei-v100.md`: real-world before/after using the full v1.0 loop
+
+### Changed
+- Consolidated 3 SKILL.md files into 1 (`@readme` and `@llms-txt` moved to `skills/_deprecated/`)
+- README rewritten with 3-verb opening + screenshots
+
+### Removed
+- `scripts/probe.py` stub (already gone in v0.1.3)
+- The original "skill collection" decomposition: now 1 unified CLI + skill
+
+### Deprecated
+- `skills/_deprecated/aisurface-readme/SKILL.md` — use `aisurface fix .`
+- `skills/_deprecated/aisurface-llms-txt/SKILL.md` — use `aisurface fix . --only=llms_txt`
+- Both deprecated SKILL.md files will be removed in v1.1.
+
 ## [0.1.3] - 2026-06-02
 
 ### Added
