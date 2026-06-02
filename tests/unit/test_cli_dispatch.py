@@ -23,10 +23,12 @@ def test_no_subcommand_shows_help():
     assert "audit" in err and "fix" in err and "verify" in err
 
 
-def test_fix_subcommand_dispatches_to_stub():
-    code, _, err = _run("fix", "evals/fixtures/minimal-cli-tool")
-    assert code == 1
-    assert "not fully wired" in err
+def test_fix_subcommand_dispatches_to_handler():
+    code, out, _ = _run("fix", "evals/fixtures/minimal-cli-tool", "--dry-run")
+    assert code == 0
+    # minimal-cli-tool already has FAQ, When to use, llms.txt, schema.json
+    # so the dispatcher reports nothing to do.
+    assert "Nothing to fix" in out
 
 
 def test_verify_subcommand_dispatches_to_stub():
