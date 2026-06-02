@@ -4,11 +4,13 @@ from __future__ import annotations
 import argparse
 import dataclasses
 import json
+import os
 import re
 import sys
 from pathlib import Path
 
 from scripts import critic, distribution, github_meta, report, scanner
+from scripts.colors import colorize
 from scripts.report import (
     CATEGORY_CHECK_IDS,
     AuditReport,
@@ -260,7 +262,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("path", nargs="?", default=".", help="Repo root (default: cwd)")
     parser.add_argument("--learn", action="store_true", help="Enable teacher mode")
     parser.add_argument("--json", action="store_true", help="Output JSON instead of Markdown")
+    parser.add_argument(
+        "--no-color",
+        action="store_true",
+        help="Disable color output. (Also disabled when NO_COLOR is set, TERM=dumb, or stdout is not a TTY.)",
+    )
     args = parser.parse_args(argv)
+
+    if args.no_color:
+        os.environ["NO_COLOR"] = "1"
 
     repo_root = Path(args.path).resolve()
     if not repo_root.exists():
@@ -280,7 +290,7 @@ def main(argv: list[str] | None = None) -> int:
             "errors": report_obj.errors,
         }, indent=2, ensure_ascii=False))
     else:
-        print(report.render_report(report_obj, teacher_mode=args.learn))
+        print(report.render_report(report_obj, teacher_mode=args.learn, wrap=colorize))
     return 0
 
 

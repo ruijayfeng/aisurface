@@ -38,6 +38,7 @@ aisurface .
 
 - **Engineer mode (default)**: terse output, just the report.
 - **Teacher mode (`--learn`)**: prepends 30-second concept primer before each check. Use this if you're new to GEO.
+- **`--no-color`** — disable color output. Equivalent to setting the `NO_COLOR=1` environment variable.
 
 ## Output
 

@@ -1,6 +1,7 @@
 """Render GEO audit reports as Markdown."""
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 
 SUB_SCORE_MAX = 100
@@ -133,12 +134,27 @@ def _bucket_results(results: list[CheckResult]) -> tuple[list, list, list, int]:
     return must_fix, should_fix, nice, deferred_count
 
 
-def _format_check_line(r: CheckResult, teacher_mode: bool = False) -> str:
-    """Format a check bullet line; optionally append a teacher-mode primer."""
+def _format_check_line(
+    r: CheckResult,
+    teacher_mode: bool = False,
+    wrap: Callable[[str, str], str] | None = None,
+    name_color: str = "gray",
+) -> str:
+    """Format a check bullet line; optionally append a teacher-mode primer.
+
+    Args:
+        r: The check result to format.
+        teacher_mode: When True, append a primer explaining why the check matters.
+        wrap: Optional colorize function `(text, color) -> str` that wraps text
+            with ANSI codes. When None (default), no color is applied — useful
+            for tests and non-TTY callers.
+        name_color: The color name passed to `wrap` for `r.name`.
+    """
+    w = wrap or (lambda text, _color: text)
     # Must-fix style includes impact; should-fix / nice-to-have don't.
     # We always emit the canonical "name + optional impact" form for consistency,
     # then optionally add the primer on the next line.
-    base = f"- **{r.name}** (impact +{r.impact}%)"
+    base = f"- **{w(r.name, name_color)}** (impact +{r.impact}%)"
     # StructuralFindings carry a file_path; show it inline so the user
     # knows which file the check examined. Avoids a forward reference to
     # StructuralFinding (this module re-exports it lazily via __getattr__).
@@ -156,55 +172,64 @@ def _format_check_line(r: CheckResult, teacher_mode: bool = False) -> str:
     return f"{base}\n  - _Why this matters: {primer}_"
 
 
-def render_report(report: AuditReport, teacher_mode: bool = False) -> str:
+def render_report(
+    report: AuditReport,
+    teacher_mode: bool = False,
+    wrap: Callable[[str, str], str] | None = None,
+) -> str:
     """Render the audit report as Markdown.
 
     Args:
         report: The audit report to render.
         teacher_mode: When True, inject a short educational primer after each
             check's name. Used by `python -m scripts.cli --learn`.
+        wrap: Optional colorize function `(text, color) -> str` that wraps text
+            with ANSI codes. When None (default), no color is applied — useful
+            for tests and non-TTY callers. The CLI passes `scripts.colors.colorize`
+            so check names and section headers get colored.
     """
+    w = wrap or (lambda text, _color: text)
     score = report.health_score
     sub_scores = _compute_sub_scores(report.results)
     must_fix, should_fix, nice, deferred_count = _bucket_results(report.results)
 
     lines: list[str] = [
-        f"# GEO Audit Report: {report.project_name}",
+        f"# GEO Audit Report: {w(report.project_name, 'bold')}",
         "",
-        f"**Health score**: {score} / {report.max_score}",
+        f"**Health score**: {w(str(score), 'bold')} / {report.max_score}",
         "",
     ]
 
     # Sub-scores section
     if sub_scores:
-        lines.append("## Sub-scores")
+        lines.append(w("## Sub-scores", "gray"))
         lines.append("")
         for label, sub in sub_scores:
-            lines.append(f"- **{label}**: {sub} / {SUB_SCORE_MAX}")
+            lines.append(f"- **{w(label, 'blue')}**: {sub} / {SUB_SCORE_MAX}")
         lines.append("")
 
     # Must-fix section
     if must_fix:
-        lines.append("## 🔴 Must-fix")
+        lines.append(w("## 🔴 Must-fix", "red"))
         lines.append("")
         for r in must_fix:
-            lines.append(_format_check_line(r, teacher_mode=teacher_mode))
+            lines.append(_format_check_line(r, teacher_mode=teacher_mode, wrap=w, name_color="red"))
         lines.append("")
 
     # Should-fix section
     if should_fix:
-        lines.append("## 🟡 Should-fix")
+        lines.append(w("## 🟡 Should-fix", "yellow"))
         lines.append("")
         for r in should_fix:
-            lines.append(_format_check_line(r, teacher_mode=teacher_mode))
+            lines.append(_format_check_line(r, teacher_mode=teacher_mode, wrap=w, name_color="yellow"))
         lines.append("")
 
     # Nice-to-have
     if nice:
-        lines.append("## 🟢 Nice-to-have")
+        lines.append(w("## 🟢 Nice-to-have", "green"))
         lines.append("")
         for r in nice:
-            lines.append(_format_check_line(r, teacher_mode=teacher_mode))
+            lines.append(_format_check_line(r, teacher_mode=teacher_mode, wrap=w, name_color="green"))
         lines.append("")
 
     # Deferred checks footer
@@ -214,7 +239,7 @@ def render_report(report: AuditReport, teacher_mode: bool = False) -> str:
 
     # Skipped checks
     if report.skipped:
-        lines.append("## ⏭️ Skipped checks")
+        lines.append(w("## ⏭️ Skipped checks", "gray"))
         lines.append("")
         for s in report.skipped:
             lines.append(f"- {s.name}: {s.error or '(no message)'}")
@@ -222,10 +247,10 @@ def render_report(report: AuditReport, teacher_mode: bool = False) -> str:
 
     # Errors
     if report.errors:
-        lines.append("## ❌ Errors")
+        lines.append(w("## ❌ Errors", "red"))
         lines.append("")
         for err in report.errors:
-            lines.append(f"- {err}")
+            lines.append(f"- {w(err, 'red')}")
         lines.append("")
 
     return "\n".join(lines).rstrip() + "\n"
