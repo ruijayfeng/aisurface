@@ -1,0 +1,12 @@
+# my-tool
+
+> A Python library.
+
+## Project details
+
+- License: <TODO: e.g. MIT>
+- Language: <TODO: e.g. Python>
+
+## Docs
+
+- [Project README](/README.md)

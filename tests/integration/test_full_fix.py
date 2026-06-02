@@ -83,3 +83,26 @@ def test_only_filter_limits_patches(tmp_path: Path):
     assert "faq" in out
     assert "llms.txt" not in out
     assert "schema" not in out
+
+
+EXPECTED_PATCHES = Path(__file__).resolve().parents[2] / "evals" / "expected_patches"
+
+
+@pytest.mark.eval
+def test_patches_match_snapshot(tmp_path: Path):
+    """Snapshot test: each patch generator's output must match recorded fixtures."""
+    import shutil
+    src = EVAL_FIXTURES / "bad-readme-python-lib"
+    fixture = tmp_path / "project"
+    shutil.copytree(src, fixture)
+
+    from scripts.fix.llms_txt import generate_llms_txt_patch
+    from scripts.fix.schema_org import generate_schema_org_patch
+
+    expected_dir = EXPECTED_PATCHES / "bad-readme-python-lib"
+
+    llms_patch = generate_llms_txt_patch(fixture)
+    assert llms_patch.new_content == (expected_dir / "llms_txt.txt").read_text(encoding="utf-8")
+
+    schema_patch = generate_schema_org_patch(fixture)
+    assert schema_patch.new_content == (expected_dir / "schema_org.json").read_text(encoding="utf-8")
