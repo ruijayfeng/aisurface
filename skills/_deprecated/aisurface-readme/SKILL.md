@@ -3,6 +3,10 @@ name: aisurface-readme
 description: Use when the user wants to optimize an open-source project's README for AI-search citation. Triggers on: "optimize my README for AI", "rewrite README for GEO", "make README AI-citation-friendly", "improve README for ChatGPT/Perplexity/Doubao citation". Reads the existing README, applies the GEO checklist (problem statement, FAQ, when-to-use, code examples, originality), and outputs a rewritten README. Standalone — does not require `aisurface@audit` to run first.
 ---
 
+> **⚠️ DEPRECATED in v1.0.** This skill has been absorbed into the unified `aisurface` skill (root `SKILL.md`).
+> Use `aisurface fix . --only=faq,when_to_use` to invoke the equivalent functionality.
+> This file will be removed in v1.1.
+
 # aisurface@readme
 
 Optimize an open-source project's README for AI-search citation.

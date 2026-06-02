@@ -3,6 +3,10 @@ name: aisurface-llms-txt
 description: Use when the user wants to add a `.well-known/llms.txt` file to their open-source project. Triggers on: "add llms.txt", "create llms.txt for my project", "generate .well-known/llms.txt", "AI crawler index file", "llms.txt per spec". Reads the project (README, package.json/pyproject.toml, docs/ structure), generates a valid llms.txt per https://llmstxt.org, and writes it to `<repo>/.well-known/llms.txt`. Validates the output before writing. Standalone.
 ---
 
+> **⚠️ DEPRECATED in v1.0.** This skill has been absorbed into the unified `aisurface` skill (root `SKILL.md`).
+> Use `aisurface fix . --only=llms_txt` to invoke the equivalent functionality.
+> This file will be removed in v1.1.
+
 # aisurface@llms-txt
 
 Generate a valid `.well-known/llms.txt` for an open-source project.
