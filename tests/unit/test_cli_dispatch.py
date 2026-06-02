@@ -34,4 +34,4 @@ def test_fix_subcommand_dispatches_to_handler():
 def test_verify_subcommand_dispatches_to_stub():
     code, _, err = _run("verify", "evals/fixtures/minimal-cli-tool")
     assert code == 1
-    assert "not implemented" in err
+    assert "not fully wired" in err
