@@ -4,7 +4,19 @@
 
 [English](./README.en.md) | [中文](./README.md)
 
-aisurface is a collection of Claude Code skills that helps **open-source project maintainers** get their projects **actively cited by AI search** (Doubao / DeepSeek / ChatGPT / Gemini / Claude / Perplexity / Kimi / Wenxin / Tongyi / GLM / ...).
+```bash
+pip install aisurface
+
+aisurface audit ./        # diagnose: 12-check GEO report
+aisurface fix ./          # treat: auto-apply patches
+aisurface verify ./       # prove: probe AI platforms for citation lift
+```
+
+![audit](docs/screenshots/audit.png)
+![fix](docs/screenshots/fix.png)
+![verify](docs/screenshots/verify.png)
+
+aisurface is a Claude Code tool that helps **open-source project maintainers** get their projects **actively cited by AI search** (Doubao / DeepSeek / ChatGPT / Gemini / Claude / Perplexity / Kimi / Wenxin / Tongyi / GLM / ...).
 
 ## Why aisurface?
 
@@ -14,51 +26,25 @@ AI cites only 3-5 sources. **If your project isn't in those 3-5, you don't exist
 
 Existing skills (`seo-audit`, `seo-geo`) only diagnose URL-perspective English Google SEO, not open-source projects, not Chinese AI. aisurface fills that gap.
 
-## Installation
+## Three-verb workflow
 
 ```bash
-# Flagship: repo audit
-npx skills add ruijayfeng/aisurface@audit
+# 1) Audit: 12 GEO checks, weighted health score 0-100
+aisurface audit .
 
-# Sub-skill: README optimization
-npx skills add ruijayfeng/aisurface@readme
-
-# Sub-skill: generate llms.txt
-npx skills add ruijayfeng/aisurface@llms-txt
-```
-
-## Quick start
-
-Run from your open-source project root:
-
-```bash
-aisurface .
-```
-
-It outputs a report: 12 checks, Health score (0-100), 🔴 Must-fix list. The 12 checks contribute to a weighted health score (Citation-Friendliness 40 / Structure 30 / Readability 20 / Distribution 10) reflecting which gaps hurt AI citation most.
-
-### One-command fix
-
-After auditing, you can auto-apply patches for the 4 most common issues:
-
-```bash
+# 2) Fix: auto-generate 4 highest-impact patches
 aisurface fix .
-```
 
-This generates: FAQ stubs in README, When-to-use sections, .well-known/llms.txt, and index.schema.json. Review the diff, confirm, done.
-
-### Prove it actually worked
-
-After `fix`, run `verify` to measure the citation lift against a baseline:
-
-```bash
+# 3) Verify: probe real AI platforms, diff against stored baseline
 export PERPLEXITY_API_KEY=...
-aisurface verify .                # establishes baseline on first run
-aisurface fix .                   # apply fixes
-aisurface verify .                # measures the lift
+aisurface verify .                # first run: establish baseline
+aisurface fix .                   # apply patches
+aisurface verify .                # second run: measure the lift
 ```
 
-The verify command probes 10 representative queries against Perplexity (more platforms coming) and compares the citation rate to a stored baseline.
+`fix` generates: FAQ stub in README, When-to-use sections, `.well-known/llms.txt`, `index.schema.json`. Review the diff, confirm, done.
+
+`verify` probes 10 representative queries against Perplexity (more platforms coming) and compares the citation rate to a stored baseline.
 
 ## 12-check audit
 
@@ -79,19 +65,17 @@ The verify command probes 10 representative queries against Perplexity (more pla
 
 ## Case study
 
-We use [ruijayfeng/ziwei](https://github.com/ruijayfeng/ziwei) for dogfooding:
+We use [ruijayfeng/ziwei](https://github.com/ruijayfeng/ziwei) for v1.0 dogfooding:
+- **Baseline**: health score 35/100, 5 🔴 Must-fix items
+- **After applying 4 patches**: health score 87/100, all 🔴 cleared (+52)
 
-- **before**: health score 35/100, 5 🔴 Must-fix items
-- **after** (~30 minutes: run audit + apply 5 must-fixes): health score 66/100, all 🔴 cleared
+See [case-studies/ziwei-v100.md](./case-studies/ziwei-v100.md).
 
-See [case-studies/ziwei-before-after.md](./case-studies/ziwei-before-after.md).
+## Installation
 
-## Roadmap
-
-- **v0.1** (W6 release): `audit` + `readme` + `llms-txt` (3 skills)
-- **v0.2** (W13): + `aisurface@schema` + `aisurface@docs` + `aisurface@landing-page`
-- **v0.3** (W25): + `aisurface@probe` (AI platform API verification)
-- **v0.4+**: MCP server, IDE integration
+```bash
+pip install aisurface
+```
 
 ## Contributing
 
