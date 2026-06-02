@@ -1,63 +1,42 @@
 ---
-name: aisurface-audit
-description: Use when the user wants to audit a local open-source project for AI-search citation readiness (GEO). Triggers on: "audit my repo for AI search", "check GEO readiness", "evaluate AI citation potential", "is my project AI-search-friendly", "GEO audit", or any request to scan a project directory for AI search optimization opportunities. Runs a 12-check audit (4 structural via Python + 8 semantic via LLM critic) and produces a Markdown report with prioritized fixes. Supports `--learn` teacher mode for users unfamiliar with GEO.
+name: aisurface
+description: Use when the user wants to make their open-source project surface in AI search results. Triggers on: "audit my repo for AI search", "GEO audit", "make my project AI-citation-friendly", "is my project cited by ChatGPT/Perplexity/DeepSeek". Provides 3 verbs — `aisurface audit` (12-check report), `aisurface fix` (auto-apply patches for must-fix items), `aisurface verify` (probe AI platforms for citation rate). Standalone CLI; no Claude required at runtime.
 ---
 
-# aisurface@audit
+# aisurface
 
-Audit a local open-source project for AI-search citation readiness. Run from the project root:
-
-```bash
-python -m scripts.cli .
-```
-
-Or with the `aisurface` console script (after `pip install -e .`):
+Make your open-source project surface in AI search results. Three verbs.
 
 ```bash
-aisurface .
+aisurface audit ./         # diagnose
+aisurface fix ./           # treat
+aisurface verify ./        # prove
 ```
 
-## What it checks (12 items)
+## audit — diagnose
 
-| # | Check | Type |
-|---|---|---|
-| 1 | README problem statement | Semantic (LLM critic) |
-| 2 | README has FAQ section | Semantic (LLM critic) |
-| 3 | README when to use / not to use | Semantic (LLM critic) |
-| 4 | README has runnable code examples | Semantic (LLM critic) |
-| 5 | Schema.org markup on website | Structural (Python) |
-| 6 | `.well-known/llms.txt` present | Structural (Python) |
-| 7 | GitHub topics complete (8-12) | Structural (GitHub API) |
-| 8 | FAQ section heading in README | Semantic (heuristic) |
-| 9 | When to use / not to use in README | Semantic (heuristic) |
-| 10 | Citation-worthy content | Semantic (heuristic) |
-| 11 | Distribution signals | Structural (heuristic) |
-| 12 | AI search platforms named in README | Semantic (heuristic) |
+Run the 12-check GEO audit:
 
-## Modes
+```bash
+aisurface audit .
+```
 
-- **Engineer mode (default)**: terse output, just the report.
-- **Teacher mode (`--learn`)**: prepends 30-second concept primer before each check. Use this if you're new to GEO.
-- **`--no-color`** — disable color output. Equivalent to setting the `NO_COLOR=1` environment variable.
+Flags: `--learn` (teacher mode), `--json`, `--no-color`.
 
-## Output
+## fix — treat
 
-A Markdown report with:
-- Health score (0-100)
-- 🔴 Must-fix (3-5 items, sorted by impact)
-- 🟡 Should-fix (3-5 items)
-- 🟢 Nice-to-have (3-5 items)
-- ⏭️ Skipped checks + reasons
-- ❌ Errors + reasons
+Generate and apply patches for the 4 highest-impact must-fix items:
+- FAQ section injection (templated 8 Q&A)
+- When-to-use / When-NOT-to-use sections
+- `.well-known/llms.txt` (per llmstxt.org)
+- `index.schema.json` (SoftwareApplication + FAQPage)
 
-## Action options
-
-After the audit report, run `aisurface fix .` to generate patches for must-fix items.
-
-- `aisurface fix .` — interactive: shows what would change, confirms before writing
-- `aisurface fix . --dry-run` — preview only, no writes
-- `aisurface fix . --yes` — apply all without confirmation
-- `aisurface fix . --only=faq,llms_txt` — only specific patch types
+```bash
+aisurface fix .                       # interactive review + apply
+aisurface fix . --dry-run             # preview only
+aisurface fix . --yes                 # apply all without prompting
+aisurface fix . --only=faq,llms_txt   # specific patch types only
+```
 
 ## verify — prove
 
@@ -72,17 +51,14 @@ aisurface verify .                    # measures lift vs baseline
 
 Flags: `--platforms=perplexity[,deepseek]`, `--baseline`, `--queries-file`.
 
-Requirements: `PERPLEXITY_API_KEY` env var (get one at https://perplexity.ai/account/api).
-
-## What it does NOT do
-
-- Does NOT call live AI APIs to verify citation (that's `aisurface@probe`, coming v0.3)
-- Does NOT modify files (use sub-skills for that)
-- Does NOT support non-OSS projects (URLs, marketing sites) — see `coreyhaines31/marketingskills@seo-audit` for that
-
 ## Requirements
 
 - Python 3.10+
-- Local project directory (not URLs)
-- For structural checks: read access to repo
-- For semantic checks: no LLM needed in v0.1 (offline heuristic); v0.3 will add real LLM
+- For `verify`: `PERPLEXITY_API_KEY` env var (Perplexity API key from https://perplexity.ai/account/api)
+- No API key needed for `audit` or `fix` (offline heuristics)
+
+## What it does NOT do
+
+- Does not modify files without `--yes` or interactive confirmation (in `fix`)
+- Does not call real LLMs by default (semantic checks use offline heuristics)
+- Does not target non-OSS projects (URLs, marketing sites)
