@@ -24,10 +24,10 @@ def test_no_subcommand_shows_help():
 
 
 def test_fix_subcommand_dispatches_to_handler():
-    code, out, _ = _run("fix", "evals/fixtures/minimal-cli-tool", "--dry-run")
+    # perfect-readme-and-docs fixture has all 4 patch targets, so the dispatcher
+    # reports "Nothing to fix" (instead of generating 4 patches).
+    code, out, _ = _run("fix", "evals/fixtures/perfect-readme-and-docs", "--dry-run")
     assert code == 0
-    # minimal-cli-tool already has FAQ, When to use, llms.txt, schema.json
-    # so the dispatcher reports nothing to do.
     assert "Nothing to fix" in out
 
 
