@@ -15,13 +15,15 @@ class Section(TypedDict):
     links: list[Link]
 
 
-def build_llms_txt(
+def render_llms_txt(
     project_name: str,
     description: str,
     sections: list[Section],
     details: dict[str, str] | None = None,
 ) -> str:
-    """Build an llms.txt file body per https://llmstxt.org.
+    """Render an llms.txt file body per https://llmstxt.org.
+
+    Pure function: takes structured inputs, returns a string.
 
     Args:
         project_name: Used as the H1.
@@ -51,6 +53,10 @@ def build_llms_txt(
     return "\n".join(lines).rstrip() + "\n"
 
 
+# Backward-compat alias (existing callers/tests use this name).
+build_llms_txt = render_llms_txt
+
+
 def validate_llms_txt(content: str) -> list[str]:
     """Return a list of validation errors. Empty list = valid."""
     errors: list[str] = []
@@ -77,7 +83,7 @@ def write_llms_txt(
     target_dir.mkdir(exist_ok=True)
     target = target_dir / "llms.txt"
     target.write_text(
-        build_llms_txt(project_name, description, sections, details),
+        render_llms_txt(project_name, description, sections, details),
         encoding="utf-8",
     )
     return target
