@@ -23,14 +23,16 @@ class CheckResult:
     max_score: float
     passed: bool
     impact: int  # 1-25, used to weight must-fix ordering
+    skipped: bool = False
+    error: str | None = None
 
 
 @dataclass
 class AuditReport:
     project_name: str
     results: list[CheckResult] = field(default_factory=list)
-    skipped: list[tuple[str, str]] = field(default_factory=list)  # (check_name, reason)
-    errors: list[tuple[str, str]] = field(default_factory=list)
+    skipped: list[CheckResult] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
 
 
 # Lazy re-export: a top-level `from scripts.findings import ...` would
@@ -169,16 +171,16 @@ def render_report(report: AuditReport, teacher_mode: bool = False) -> str:
     if report.skipped:
         lines.append("## ⏭️ Skipped checks")
         lines.append("")
-        for name, reason in report.skipped:
-            lines.append(f"- {name}: {reason}")
+        for s in report.skipped:
+            lines.append(f"- {s.name}: {s.error}")
         lines.append("")
 
     # Errors
     if report.errors:
         lines.append("## ❌ Errors")
         lines.append("")
-        for name, err in report.errors:
-            lines.append(f"- {name}: {err}")
+        for err in report.errors:
+            lines.append(f"- {err}")
         lines.append("")
 
     return "\n".join(lines).rstrip() + "\n"

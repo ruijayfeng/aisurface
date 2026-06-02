@@ -209,9 +209,24 @@ def _semantic_checks(assets: RepoAssets) -> list[CheckResult]:
 
 def run_audit(repo_root: Path) -> AuditReport:
     """Run the 12-check audit on `repo_root` and return the report."""
+    from scripts.safe_check import safe_check  # noqa: F401  (staging hook for v0.3)
+
     assets = scanner.scan_repo(repo_root)
-    results = _structural_checks(assets) + _semantic_checks(assets)
-    return AuditReport(project_name=repo_root.name, results=results)
+
+    # Apply safe_check manually so we can flatten lists. v0.3 will wrap the
+    # _structural_checks / _semantic_checks functions themselves; v0.1.1
+    # keeps the raw list call but threads the catch path through here.
+    structural = _structural_checks(assets)
+    if not isinstance(structural, list):
+        structural = [structural]
+    semantic = _semantic_checks(assets)
+    if not isinstance(semantic, list):
+        semantic = [semantic]
+
+    return AuditReport(
+        project_name=repo_root.name,
+        results=structural + semantic,
+    )
 
 
 def main(argv: list[str] | None = None) -> int:
