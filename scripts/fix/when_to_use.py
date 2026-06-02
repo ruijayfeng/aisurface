@@ -68,8 +68,5 @@ def _insert_after_first_h1(content: str, section: str) -> str:
         return content + sep + "\n" + section
     rest_start = h1_match.end()
     next_h2 = re.search(r"^##\s+", content[rest_start:], re.MULTILINE)
-    if next_h2:
-        idx = rest_start + next_h2.start()
-    else:
-        idx = len(content)
+    idx = rest_start + next_h2.start() if next_h2 else len(content)
     return content[:idx] + section + "\n" + content[idx:]
