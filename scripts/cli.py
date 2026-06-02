@@ -103,7 +103,7 @@ def _structural_checks(assets: RepoAssets) -> list[CheckResult]:
             max_score=10,
             passed=assets.has_schema_org,
             impact=20,
-            file_path="index.schema.json" if assets.has_schema_org else None,
+            file_path="index.schema.json",  # Always set, regardless of pass/fail
         )
     )
     # #6 llms.txt
@@ -116,7 +116,7 @@ def _structural_checks(assets: RepoAssets) -> list[CheckResult]:
             max_score=10,
             passed=assets.has_llms_txt,
             impact=15,
-            file_path=".well-known/llms.txt" if assets.has_llms_txt else None,
+            file_path=".well-known/llms.txt",  # Always set, regardless of pass/fail
         )
     )
     # #7 GitHub topics — use suggest_topics to count candidates from readme

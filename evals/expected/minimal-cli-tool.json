@@ -7,7 +7,8 @@
       "score": 0,
       "max_score": 10,
       "passed": false,
-      "impact": 20
+      "impact": 20,
+      "file_path": "index.schema.json"
     },
     {
       "id": 6,
@@ -15,7 +16,8 @@
       "score": 0,
       "max_score": 10,
       "passed": false,
-      "impact": 15
+      "impact": 15,
+      "file_path": ".well-known/llms.txt"
     },
     {
       "id": 7,

@@ -142,3 +142,18 @@ def test_semantic_checks_do_not_return_structural_finding():
 
     non_structural = [r for r in report.results if not isinstance(r, StructuralFinding)]
     assert len(non_structural) == 10, f"Expected 10 non-StructuralFinding results, got {len(non_structural)}"
+
+
+def test_structural_finding_file_path_set_even_when_failing():
+    """file_path is set regardless of pass/fail (always tells user which file is expected)."""
+    from scripts.cli import run_audit
+    from scripts.findings import StructuralFinding
+
+    fixture_root = Path(__file__).resolve().parents[2] / "evals" / "fixtures" / "bad-readme-python-lib"
+    report = run_audit(fixture_root)
+
+    structural = [r for r in report.results if isinstance(r, StructuralFinding)]
+    assert len(structural) == 2
+    for r in structural:
+        assert r.file_path is not None, f"Check #{r.id} failed but file_path is None"
+        assert r.file_path.endswith((".json", ".txt"))
