@@ -2,7 +2,14 @@
 from __future__ import annotations
 
 import argparse
+import importlib
 import sys
+
+_DISPATCH = {
+    "audit": "scripts.audit.cmd_audit",
+    "fix": "scripts.fix.cmd_fix",
+    "verify": "scripts.verify.cmd_verify",
+}
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -45,17 +52,13 @@ def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
 
-    if args.command == "audit":
-        from scripts.audit import cmd_audit
-        return cmd_audit(args)
-    if args.command == "fix":
-        from scripts.fix import cmd_fix
-        return cmd_fix(args)
-    if args.command == "verify":
-        from scripts.verify import cmd_verify
-        return cmd_verify(args)
-    parser.print_help()
-    return 1
+    target = _DISPATCH.get(args.command)
+    if target is None:
+        parser.print_help()
+        return 1
+    module_path, _, attr = target.rpartition(".")
+    handler = getattr(importlib.import_module(module_path), attr)
+    return handler(args)
 
 
 if __name__ == "__main__":

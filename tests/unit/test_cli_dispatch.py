@@ -23,11 +23,13 @@ def test_no_subcommand_shows_help():
     assert "audit" in err and "fix" in err and "verify" in err
 
 
-def test_fix_subcommand_registered():
-    code, _, err = _run("fix", "--help")
-    assert code == 0
+def test_fix_subcommand_dispatches_to_stub():
+    code, _, err = _run("fix", "evals/fixtures/minimal-cli-tool")
+    assert code == 1
+    assert "not implemented" in err
 
 
-def test_verify_subcommand_registered():
-    code, _, err = _run("verify", "--help")
-    assert code == 0
+def test_verify_subcommand_dispatches_to_stub():
+    code, _, err = _run("verify", "evals/fixtures/minimal-cli-tool")
+    assert code == 1
+    assert "not implemented" in err
