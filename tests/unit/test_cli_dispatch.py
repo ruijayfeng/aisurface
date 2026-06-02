@@ -31,7 +31,17 @@ def test_fix_subcommand_dispatches_to_handler():
     assert "Nothing to fix" in out
 
 
-def test_verify_subcommand_dispatches_to_stub():
-    code, _, err = _run("verify", "evals/fixtures/minimal-cli-tool")
-    assert code == 1
-    assert "not fully wired" in err
+def test_verify_subcommand_is_wired():
+    # After Task 13, the stub is gone. Without PERPLEXITY_API_KEY, the
+    # wired command should fail with an actionable API-key error (not
+    # the old "not fully wired" stub message).
+    import os
+    env_key = os.environ.pop("PERPLEXITY_API_KEY", None)
+    try:
+        code, _, err = _run("verify", "evals/fixtures/minimal-cli-tool")
+        assert code == 1
+        assert "not fully wired" not in err
+        assert "PERPLEXITY_API_KEY" in err
+    finally:
+        if env_key is not None:
+            os.environ["PERPLEXITY_API_KEY"] = env_key
