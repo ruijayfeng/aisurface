@@ -1,0 +1,103 @@
+{
+  "project_name": "perfect-readme-and-docs",
+  "results": [
+    {
+      "id": 5,
+      "name": "Schema.org markup on website",
+      "score": 10,
+      "max_score": 10,
+      "passed": true,
+      "impact": 20
+    },
+    {
+      "id": 6,
+      "name": ".well-known/llms.txt present",
+      "score": 10,
+      "max_score": 10,
+      "passed": true,
+      "impact": 15
+    },
+    {
+      "id": 7,
+      "name": "GitHub topics complete (8-12)",
+      "score": 5,
+      "max_score": 10,
+      "passed": false,
+      "impact": 5
+    },
+    {
+      "id": 11,
+      "name": "Distribution signals (awesome / npm / PyPI)",
+      "score": 1,
+      "max_score": 10,
+      "passed": false,
+      "impact": 5
+    },
+    {
+      "id": 1,
+      "name": "README problem statement",
+      "score": 7,
+      "max_score": 10,
+      "passed": true,
+      "impact": 20
+    },
+    {
+      "id": 2,
+      "name": "README has FAQ section",
+      "score": 9,
+      "max_score": 10,
+      "passed": true,
+      "impact": 15
+    },
+    {
+      "id": 3,
+      "name": "README when to use / not to use",
+      "score": 8,
+      "max_score": 10,
+      "passed": true,
+      "impact": 10
+    },
+    {
+      "id": 4,
+      "name": "README has runnable code examples",
+      "score": 9,
+      "max_score": 10,
+      "passed": true,
+      "impact": 15
+    },
+    {
+      "id": 8,
+      "name": "FAQ section in README",
+      "score": 10,
+      "max_score": 10,
+      "passed": true,
+      "impact": 5
+    },
+    {
+      "id": 9,
+      "name": "When to use / not to use in README",
+      "score": 10,
+      "max_score": 10,
+      "passed": true,
+      "impact": 8
+    },
+    {
+      "id": 10,
+      "name": "Citation-worthy content",
+      "score": 10,
+      "max_score": 10,
+      "passed": true,
+      "impact": 8
+    },
+    {
+      "id": 12,
+      "name": "AI platform coverage in README",
+      "score": 10,
+      "max_score": 10,
+      "passed": true,
+      "impact": 10
+    }
+  ],
+  "skipped": [],
+  "errors": []
+}

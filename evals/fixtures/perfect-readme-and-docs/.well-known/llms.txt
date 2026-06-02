@@ -1,0 +1,17 @@
+# perfect-readme-and-docs
+
+> A meta-project designed as a perfect-score fixture for aisurface-audit. Validates the audit's upper bound (target: ≥ 95/100).
+
+This project exists solely to verify that `aisurface-audit` can score a perfectly-optimized repository at or near 100. It contains:
+
+- A complete README with FAQ, When-to-use / When-NOT-to-use, citation-worthy content, and 7 platform mentions
+- A valid `index.schema.json` (Schema.org `SoftwareApplication`)
+- A valid `.well-known/llms.txt` (H1 + blockquote)
+- A `package.json` (signals JS project type)
+- A `docs/` directory
+
+The corresponding real-world case study is [ruijayfeng/ziwei](https://github.com/ruijayfeng/ziwei), a 343-star React 19 application that was the original dogfooding case for aisurface.
+
+- [README.md](README.md): the deliberately-ideal README
+- [docs/index.md](docs/index.md): minimal docs index
+- [index.schema.json](index.schema.json): Schema.org JSON-LD

@@ -1,0 +1,19 @@
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "perfect-readme-and-docs",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Cross-platform",
+  "description": "A meta-project designed as a perfect-score fixture for aisurface-audit",
+  "url": "https://github.com/ruijayfeng/aisurface/tree/main/evals/fixtures/perfect-readme-and-docs",
+  "author": {
+    "@type": "Organization",
+    "name": "ruijayfeng"
+  },
+  "license": "https://opensource.org/licenses/MIT",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}

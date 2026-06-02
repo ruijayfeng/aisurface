@@ -1,0 +1,18 @@
+{
+  "name": "perfect-readme-and-docs",
+  "version": "1.0.0",
+  "description": "A meta-project designed as a perfect-score fixture for aisurface-audit",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No tests\" && exit 0"
+  },
+  "keywords": [
+    "meta",
+    "fixture",
+    "aisurface",
+    "ai-search",
+    "geo"
+  ],
+  "author": "ruijayfeng",
+  "license": "MIT"
+}

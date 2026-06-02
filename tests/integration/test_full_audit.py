@@ -25,6 +25,7 @@ def _run_audit_json(fixture_path: Path) -> dict:
     "bad-readme-python-lib",
     "good-schema-nextjs-docs",
     "minimal-cli-tool",
+    "perfect-readme-and-docs",
 ])
 def test_audit_matches_expected(fixture_name):
     """Run aisurface CLI on a fixture and compare to its expected JSON.
