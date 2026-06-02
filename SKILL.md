@@ -59,6 +59,21 @@ After the audit report, run `aisurface fix .` to generate patches for must-fix i
 - `aisurface fix . --yes` — apply all without confirmation
 - `aisurface fix . --only=faq,llms_txt` — only specific patch types
 
+## verify — prove
+
+Probe AI platforms to measure citation rate before/after:
+
+```bash
+export PERPLEXITY_API_KEY=...
+aisurface verify .                    # first run = baseline
+aisurface fix .                       # apply fixes
+aisurface verify .                    # measures lift vs baseline
+```
+
+Flags: `--platforms=perplexity[,deepseek]`, `--baseline`, `--queries-file`.
+
+Requirements: `PERPLEXITY_API_KEY` env var (get one at https://perplexity.ai/account/api).
+
 ## What it does NOT do
 
 - Does NOT call live AI APIs to verify citation (that's `aisurface@probe`, coming v0.3)

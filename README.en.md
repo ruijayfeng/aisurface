@@ -47,6 +47,19 @@ aisurface fix .
 
 This generates: FAQ stubs in README, When-to-use sections, .well-known/llms.txt, and index.schema.json. Review the diff, confirm, done.
 
+### Prove it actually worked
+
+After `fix`, run `verify` to measure the citation lift against a baseline:
+
+```bash
+export PERPLEXITY_API_KEY=...
+aisurface verify .                # establishes baseline on first run
+aisurface fix .                   # apply fixes
+aisurface verify .                # measures the lift
+```
+
+The verify command probes 10 representative queries against Perplexity (more platforms coming) and compares the citation rate to a stored baseline.
+
 ## 12-check audit
 
 | # | Check | Type |

@@ -47,6 +47,19 @@ aisurface fix .
 
 会生成：README FAQ 段、When-to-use 段、`.well-known/llms.txt`、`index.schema.json`。review diff，确认，写盘，完事。
 
+### 验证 fix 真的有效
+
+`fix` 跑完之后，用 `verify` 量化引用率的提升——和保存的基线对比：
+
+```bash
+export PERPLEXITY_API_KEY=...
+aisurface verify .                # 第一次跑：建立基线
+aisurface fix .                   # 跑一次修复
+aisurface verify .                # 第二次跑：对比基线，输出提升幅度
+```
+
+`verify` 会向 Perplexity 投送 10 条代表性 query（更多平台在路上），然后把当前引用率与本地保存的基线做对比，给出数字化的提升幅度。
+
 ## 12 项审计清单
 
 | # | 检查项 | 类型 |

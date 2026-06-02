@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.1.3] - 2026-06-02
+
+### Added
+- `aisurface verify` subcommand: probes AI platforms for citation rate
+  - PerplexityAdapter (real API client, mocked in tests)
+  - Query generator with per-project-type templates (10 queries default)
+  - Baseline store at `~/.aisurface/baselines/<hash>/<platform>.json`
+  - `--platforms`, `--baseline`, `--queries-file` flags
+- Custom cache dir via `AISURFACE_CACHE_DIR` env var (mainly for testing)
+- Actionable error when `PERPLEXITY_API_KEY` is missing
+
+### Changed
+- Removed legacy `scripts/probe.py` stub (replaced by `scripts/verify/` module)
+
+### Tests
+- 105 tests passing (up from 89 in v0.1.2)
+
 ## [0.1.2] - 2026-06-02
 
 ### Added
