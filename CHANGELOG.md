@@ -11,19 +11,6 @@
 - Bilingual README (zh + en)
 - Case study: ruijayfeng/ziwei before/after
 
-### Launch Materials
-- Show HN draft: `docs/launch/show-hn.md`
-- 即刻 post: `docs/launch/jike.md`
-- 掘金 article: `docs/launch/juejin.md`
-- 推特 thread: `docs/launch/twitter.md`
-- Recruit DM template: `docs/launch/recruit-dm.md`
-- Launch index: `docs/launch/README.md`
-
-### Operations
-- Issue triage runbook: `docs/process/TRIAGE.md`
-- Monthly platform update runbook: `docs/process/PLATFORM-UPDATE-RUNBOOK.md`
-- GitHub Discussions setup steps: `docs/process/STATE-DISCUSSION-SETUP.md`
-
 ### Known gaps for v0.1.1
 
 These were identified during final code review but deferred to keep v0.1.0 shippable. None of them block the public launch; they are planned for the next patch release.
