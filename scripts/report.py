@@ -33,6 +33,18 @@ class AuditReport:
     errors: list[tuple[str, str]] = field(default_factory=list)
 
 
+# Lazy re-export: a top-level `from scripts.findings import ...` would
+# create a circular import (findings.py imports CheckResult from this
+# module, so this module can't import from findings at load time).
+# PEP 562 module __getattr__ defers the import until an external caller
+# actually asks for `scripts.report.StructuralFinding`.
+def __getattr__(name: str):
+    if name == "StructuralFinding":
+        from scripts.findings import StructuralFinding
+        return StructuralFinding
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+
 def _compute_health_score(results: list[CheckResult]) -> int:
     if not results:
         return 0
@@ -80,6 +92,12 @@ def _format_check_line(r: CheckResult, teacher_mode: bool = False) -> str:
     # We always emit the canonical "name + optional impact" form for consistency,
     # then optionally add the primer on the next line.
     base = f"- **{r.name}** (impact +{r.impact}%)"
+    # StructuralFindings carry a file_path; show it inline so the user
+    # knows which file the check examined. Avoids a forward reference to
+    # StructuralFinding (this module re-exports it lazily via __getattr__).
+    file_path = getattr(r, "file_path", None)
+    if file_path:
+        base = f"{base} (`{file_path}`)"
     if not teacher_mode:
         return base
     # Local import to avoid a hard dependency at module import time and to keep

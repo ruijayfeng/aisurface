@@ -35,3 +35,21 @@ def test_render_report_handles_empty_results():
     report = AuditReport(project_name="empty", results=[])
     output = render_report(report)
     assert "empty" in output
+
+
+def test_render_report_shows_structural_finding_file_path():
+    """StructuralFinding results should include their file_path in the rendered output."""
+    from scripts.findings import StructuralFinding
+
+    results = [
+        StructuralFinding(id=5, name="Schema.org markup on website", category="structural",
+                          score=5, max_score=10, passed=True, impact=20,
+                          file_path="index.schema.json"),
+        CheckResult(id=1, name="README problem statement", category="semantic",
+                    score=8, max_score=10, passed=True, impact=15),
+    ]
+    report = AuditReport(project_name="p", results=results)
+    output = render_report(report)
+    assert "`index.schema.json`" in output
+    # Plain CheckResults have no file_path; ensure we didn't accidentally render one.
+    assert "None" not in output

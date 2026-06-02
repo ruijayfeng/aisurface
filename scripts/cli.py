@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 from scripts import critic, distribution, github_meta, report, scanner
-from scripts.report import AuditReport, CheckResult
+from scripts.report import AuditReport, CheckResult, StructuralFinding
 from scripts.scanner import RepoAssets
 
 # AI search platforms tracked in references/ai-search-platforms.md.
@@ -95,7 +95,7 @@ def _structural_checks(assets: RepoAssets) -> list[CheckResult]:
 
     # #5 Schema.org
     results.append(
-        CheckResult(
+        StructuralFinding(
             id=5,
             name="Schema.org markup on website",
             category="structural",
@@ -103,11 +103,12 @@ def _structural_checks(assets: RepoAssets) -> list[CheckResult]:
             max_score=10,
             passed=assets.has_schema_org,
             impact=20,
+            file_path="index.schema.json" if assets.has_schema_org else None,
         )
     )
     # #6 llms.txt
     results.append(
-        CheckResult(
+        StructuralFinding(
             id=6,
             name=".well-known/llms.txt present",
             category="structural",
@@ -115,6 +116,7 @@ def _structural_checks(assets: RepoAssets) -> list[CheckResult]:
             max_score=10,
             passed=assets.has_llms_txt,
             impact=15,
+            file_path=".well-known/llms.txt" if assets.has_llms_txt else None,
         )
     )
     # #7 GitHub topics — use suggest_topics to count candidates from readme
@@ -237,7 +239,8 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps({
             "project_name": report_obj.project_name,
             "results": [
-                {"id": r.id, "name": r.name, "score": r.score, "max_score": r.max_score, "passed": r.passed, "impact": r.impact}
+                {**{"id": r.id, "name": r.name, "score": r.score, "max_score": r.max_score, "passed": r.passed, "impact": r.impact},
+                 **({"file_path": r.file_path} if isinstance(r, StructuralFinding) else {})}
                 for r in report_obj.results
             ],
             "skipped": report_obj.skipped,

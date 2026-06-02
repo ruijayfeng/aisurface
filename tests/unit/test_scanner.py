@@ -106,3 +106,39 @@ def test_iter_relevant_files_prunes_ignored_dirs(tmp_path):
     # a dirpath inside node_modules
     for dirpath in visited:
         assert "node_modules" not in Path(dirpath).parts, f"Walked into ignored dir: {dirpath}"
+
+
+def test_structural_finding_imports():
+    """StructuralFinding should be importable from scripts.findings."""
+    from scripts.findings import StructuralFinding
+    from scripts.report import CheckResult
+
+    assert issubclass(StructuralFinding, CheckResult)
+
+
+def test_structural_checks_return_structural_finding():
+    """Checks #5 and #6 (file-based structural) should return StructuralFinding with file_path."""
+    from scripts.cli import run_audit
+    from scripts.findings import StructuralFinding
+
+    fixture_root = Path(__file__).resolve().parents[2] / "evals" / "fixtures" / "good-schema-nextjs-docs"
+    report = run_audit(fixture_root)
+
+    structural_with_paths = [r for r in report.results if isinstance(r, StructuralFinding)]
+    assert len(structural_with_paths) == 2, f"Expected 2 StructuralFinding results, got {len(structural_with_paths)}"
+
+    for r in structural_with_paths:
+        assert r.file_path is not None
+        assert r.file_path.endswith((".json", ".txt"))
+
+
+def test_semantic_checks_do_not_return_structural_finding():
+    """Non-file-based checks should NOT return StructuralFinding."""
+    from scripts.cli import run_audit
+    from scripts.findings import StructuralFinding
+
+    fixture_root = Path(__file__).resolve().parents[2] / "evals" / "fixtures" / "good-schema-nextjs-docs"
+    report = run_audit(fixture_root)
+
+    non_structural = [r for r in report.results if not isinstance(r, StructuralFinding)]
+    assert len(non_structural) == 10, f"Expected 10 non-StructuralFinding results, got {len(non_structural)}"
