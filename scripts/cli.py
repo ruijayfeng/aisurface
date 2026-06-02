@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import argparse
+import dataclasses
+import json
 import re
 import sys
 from pathlib import Path
@@ -209,17 +211,17 @@ def _semantic_checks(assets: RepoAssets) -> list[CheckResult]:
 
 def run_audit(repo_root: Path) -> AuditReport:
     """Run the 12-check audit on `repo_root` and return the report."""
-    from scripts.safe_check import safe_check  # noqa: F401  (staging hook for v0.3)
+    from scripts.safe_check import safe_check
 
     assets = scanner.scan_repo(repo_root)
 
-    # Apply safe_check manually so we can flatten lists. v0.3 will wrap the
-    # _structural_checks / _semantic_checks functions themselves; v0.1.1
-    # keeps the raw list call but threads the catch path through here.
-    structural = _structural_checks(assets)
+    # Apply safe_check to each check group. If the group throws, the
+    # decorator returns a single CheckResult; wrap in a list so the
+    # downstream `results: list[CheckResult]` contract is preserved.
+    structural = safe_check(_structural_checks)(assets)
     if not isinstance(structural, list):
         structural = [structural]
-    semantic = _semantic_checks(assets)
+    semantic = safe_check(_semantic_checks)(assets)
     if not isinstance(semantic, list):
         semantic = [semantic]
 
@@ -250,7 +252,6 @@ def main(argv: list[str] | None = None) -> int:
 
     report_obj = run_audit(repo_root)
     if args.json:
-        import json
         print(json.dumps({
             "project_name": report_obj.project_name,
             "results": [
@@ -258,7 +259,7 @@ def main(argv: list[str] | None = None) -> int:
                  **({"file_path": r.file_path} if isinstance(r, StructuralFinding) else {})}
                 for r in report_obj.results
             ],
-            "skipped": report_obj.skipped,
+            "skipped": [dataclasses.asdict(s) for s in report_obj.skipped],
             "errors": report_obj.errors,
         }, indent=2, ensure_ascii=False))
     else:

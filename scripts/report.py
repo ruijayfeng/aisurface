@@ -16,7 +16,7 @@ CATEGORY_LABELS = {
 
 @dataclass
 class CheckResult:
-    id: int
+    id: int | str
     name: str
     category: str  # "structural" or "semantic"
     score: float
@@ -172,7 +172,7 @@ def render_report(report: AuditReport, teacher_mode: bool = False) -> str:
         lines.append("## ⏭️ Skipped checks")
         lines.append("")
         for s in report.skipped:
-            lines.append(f"- {s.name}: {s.error}")
+            lines.append(f"- {s.name}: {s.error or '(no message)'}")
         lines.append("")
 
     # Errors
