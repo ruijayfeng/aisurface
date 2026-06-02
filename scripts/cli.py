@@ -132,15 +132,19 @@ def _structural_checks(assets: RepoAssets) -> list[CheckResult]:
             impact=5,
         )
     )
-    # #11 Distribution signals — use check_signals with placeholder inputs
+    # #11 Distribution signals — use real local-signal detection.
+    # github_stars stays 0 until v0.3 wires real GitHub API (per CHANGELOG).
+    # The pass threshold is 5, the max achievable from locally-observable
+    # signals (registries max 3 + description max 2). v0.3 can raise it to 6
+    # once stars become real data.
     sig = distribution.check_signals(
         project_name=assets.root.name,
         description=readme_text[:200] if readme_text else "",
         github_stars=0,
-        has_npm=False,
-        has_pypi=False,
+        has_npm=assets.has_npm,
+        has_pypi=assets.has_pypi,
     )
-    dist_passed = sig["score"] >= 6
+    dist_passed = sig["score"] >= 5
     results.append(
         CheckResult(
             id=11,

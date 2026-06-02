@@ -48,6 +48,12 @@ class RepoAssets:
     has_llms_txt: bool = False
     has_schema_org: bool = False
     schema_files: list[Path] = field(default_factory=list)
+    # Registry markers are independent: a project can publish to both
+    # npm and PyPI. project_type is a single most-specific label
+    # (nextjs > vite > rust > go > python > node), so it can't answer
+    # "does this repo also have a package.json?" by itself.
+    has_npm: bool = False
+    has_pypi: bool = False
 
     def to_dict(self) -> dict:
         return {
@@ -58,6 +64,8 @@ class RepoAssets:
             "has_well_known_dir": self.has_well_known_dir,
             "has_llms_txt": self.has_llms_txt,
             "has_schema_org": self.has_schema_org,
+            "has_npm": self.has_npm,
+            "has_pypi": self.has_pypi,
             "schema_files": [str(p) for p in self.schema_files],
         }
 
@@ -89,6 +97,8 @@ def scan_repo(root: Path) -> RepoAssets:
         root=root,
         readme=(root / "README.md") if (root / "README.md").exists() else None,
         project_type=_detect_project_type(root),
+        has_npm=(root / "package.json").exists(),
+        has_pypi=any((root / m).exists() for m in ("pyproject.toml", "setup.py")),
     )
 
     docs_dir = root / "docs"

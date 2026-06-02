@@ -28,7 +28,7 @@
     {
       "id": 11,
       "name": "Distribution signals (awesome / npm / PyPI)",
-      "score": 1,
+      "score": 3,
       "max_score": 10,
       "passed": false,
       "impact": 5

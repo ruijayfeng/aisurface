@@ -1,6 +1,6 @@
 # perfect-readme-and-docs
 
-> 一个为 aisurface audit 测试而设计的"满分样本"项目。本项目所有 12 项检查都应该通过。
+> 一个为 aisurface audit 测试而设计的"满分样本"开源（open-source）项目。本项目自动化（automate）了 12 项检查的覆盖率验证，目标是让 audit 在理想输入上跑出上限分数。
 
 perfect-readme-and-docs 是一个用于 GEO（生成式引擎优化）和 AI 搜索可见性的元项目（meta-project）。它本身不解决任何业务问题——它存在的唯一目的是作为 `aisurface-audit` 的对照 fixture，验证 audit 在"理想项目"上的得分上限。
 
@@ -134,6 +134,11 @@ aisurface 的 12 项检查基于以下研究：
 - 结构 30（schema / llms.txt / GitHub topics）
 - 可读性 20（问题陈述 / 章节结构）
 - 覆盖 10（distribution / platform 提及）
+
+## 主题与栈 (Topics)
+
+本项目涉及的主题与技术栈关键词（用于 GitHub Topics 自动建议）：
+`aisurface` · `ai-search` · `geo` · `claude-code` · `open-source` · `developer-tools` · `markdown` · `documentation` · `cli` · `python` · `javascript` · `typescript` · `react` · `nextjs` · `llms-txt` · `schema-org` · `seo` · `audit`
 
 ## FAQ (Frequently Asked Questions)
 

@@ -28,7 +28,7 @@
     {
       "id": 11,
       "name": "Distribution signals (awesome / npm / PyPI)",
-      "score": 1,
+      "score": 3,
       "max_score": 10,
       "passed": false,
       "impact": 5
@@ -44,7 +44,7 @@
     {
       "id": 2,
       "name": "README has FAQ section",
-      "score": 9,
+      "score": 10,
       "max_score": 10,
       "passed": true,
       "impact": 15
@@ -60,7 +60,7 @@
     {
       "id": 4,
       "name": "README has runnable code examples",
-      "score": 9,
+      "score": 10,
       "max_score": 10,
       "passed": true,
       "impact": 15

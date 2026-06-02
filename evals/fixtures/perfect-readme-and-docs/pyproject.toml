@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "perfect-readme-and-docs"
+version = "1.0.0"
+description = "A meta-project designed as a perfect-score fixture for aisurface-audit"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "ruijayfeng" }]
+keywords = ["aisurface", "ai-search", "geo", "open-source", "audit"]
+requires-python = ">=3.10"
+

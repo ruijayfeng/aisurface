@@ -46,20 +46,22 @@ def offline_critique(readme_text: str, topic: str) -> dict:
         problem_clarity -= 2
     problem_clarity = max(0, min(10, problem_clarity))
 
-    # FAQ
+    # FAQ — explicit heading is an unambiguous max signal; question-pattern
+    # fallback is partial credit.
     has_faq = 0
     if "## faq" in text or "### faq" in text or "frequently asked" in text:
-        has_faq = 9
+        has_faq = 10
     elif re.search(r"\?.*\n.*answer", text):
         has_faq = 6
 
-    # Code examples
+    # Code examples — multiple fenced blocks is an unambiguous max signal;
+    # one block or a bare install command is partial credit.
     has_code_examples = 0
     code_block_count = text.count("```")
     if code_block_count >= 4:
-        has_code_examples = 9
+        has_code_examples = 10
     elif code_block_count >= 2:
-        # One fenced code block (install/usage) is high-signal for GEO — score 8 (vs 9 for many blocks)
+        # One fenced code block (install/usage) is high-signal for GEO — score 8 (vs 10 for many blocks)
         has_code_examples = 8
     elif "install" in text and ("pip install" in text or "npm install" in text):
         has_code_examples = 4
