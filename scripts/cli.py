@@ -282,7 +282,7 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps({
             "project_name": report_obj.project_name,
             "results": [
-                {**{"id": r.id, "name": r.name, "score": r.score, "max_score": r.max_score, "passed": r.passed, "impact": r.impact},
+                {**{"id": r.id, "name": r.name, "score": r.score, "max_score": r.max_score, "passed": r.passed, "impact": r.impact, "skipped": r.skipped, "error": r.error},
                  **({"file_path": r.file_path} if isinstance(r, StructuralFinding) else {})}
                 for r in report_obj.results
             ],
