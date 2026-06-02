@@ -13,7 +13,7 @@ EXPECTED_DIR = Path(__file__).resolve().parents[2] / "evals" / "expected"
 def _run_audit_json(fixture_path: Path) -> dict:
     """Run the CLI on `fixture_path` with --json and return the parsed report."""
     result = subprocess.run(
-        [sys.executable, "-m", "scripts.cli", str(fixture_path), "--json"],
+        [sys.executable, "-m", "scripts.cli", "audit", str(fixture_path), "--json"],
         capture_output=True, text=True,
     )
     assert result.returncode == 0, f"CLI failed: {result.stderr}"
@@ -68,7 +68,7 @@ def test_audit_fails_gracefully_on_minimal():
     """The minimal-cli-tool fixture should not crash on missing files."""
     fixture_path = EVAL_FIXTURES / "minimal-cli-tool"
     result = subprocess.run(
-        [sys.executable, "-m", "scripts.cli", str(fixture_path)],
+        [sys.executable, "-m", "scripts.cli", "audit", str(fixture_path)],
         capture_output=True, text=True, encoding="utf-8",
     )
     assert result.returncode == 0

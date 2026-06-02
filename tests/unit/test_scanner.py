@@ -118,7 +118,7 @@ def test_structural_finding_imports():
 
 def test_structural_checks_return_structural_finding():
     """Checks #5 and #6 (file-based structural) should return StructuralFinding with file_path."""
-    from scripts.cli import run_audit
+    from scripts.audit import run_audit
     from scripts.findings import StructuralFinding
 
     fixture_root = Path(__file__).resolve().parents[2] / "evals" / "fixtures" / "good-schema-nextjs-docs"
@@ -134,7 +134,7 @@ def test_structural_checks_return_structural_finding():
 
 def test_semantic_checks_do_not_return_structural_finding():
     """Non-file-based checks should NOT return StructuralFinding."""
-    from scripts.cli import run_audit
+    from scripts.audit import run_audit
     from scripts.findings import StructuralFinding
 
     fixture_root = Path(__file__).resolve().parents[2] / "evals" / "fixtures" / "good-schema-nextjs-docs"
@@ -146,7 +146,7 @@ def test_semantic_checks_do_not_return_structural_finding():
 
 def test_structural_finding_file_path_set_even_when_failing():
     """file_path is set regardless of pass/fail (always tells user which file is expected)."""
-    from scripts.cli import run_audit
+    from scripts.audit import run_audit
     from scripts.findings import StructuralFinding
 
     fixture_root = Path(__file__).resolve().parents[2] / "evals" / "fixtures" / "bad-readme-python-lib"
