@@ -15,7 +15,6 @@
 
 These were identified during final code review but deferred to keep v0.1.0 shippable. None of them block the public launch; they are planned for the next patch release.
 
-- **Weighted health score (40/30/20/10).** Current `_compute_health_score` averages all 12 checks equally. A category-weighted formula (Structure 40 / Readability 30 / Distribution 20 / Platform coverage 10) would better reflect which gaps hurt AI citation most. Requires deciding category buckets for each check first.
 - **Perfect-readme-and-docs eval fixture (4th).** The 3 current fixtures exercise low/mid/edge cases; a 4th "ideal" fixture is needed to confirm the audit's upper bound (target score ≥ 90) and to regression-test the rubric ceiling.
 - **`--patch` flag.** Generate a unified diff for the top 3 must-fixes so users can `git apply` directly. Requires reading the actual repo files and templating per-fix transformations (FAQ injection, when-to-use section stub, etc.).
 - **LLM call resilience.** v0.1's `offline_critique` is deterministic and doesn't need try/except. v0.3 will call real LLMs and needs per-check error containment so a single provider failure doesn't abort the whole audit.

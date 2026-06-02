@@ -35,7 +35,7 @@ Run from your open-source project root:
 aisurface .
 ```
 
-It outputs a report: 12 checks, Health score (0-100), 🔴 Must-fix list.
+It outputs a report: 12 checks, Health score (0-100), 🔴 Must-fix list. The 12 checks contribute to a weighted health score (Citation-Friendliness 40 / Structure 30 / Readability 20 / Distribution 10) reflecting which gaps hurt AI citation most.
 
 ## 12-check audit
 

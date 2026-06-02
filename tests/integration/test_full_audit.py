@@ -69,7 +69,7 @@ def test_audit_fails_gracefully_on_minimal():
     fixture_path = EVAL_FIXTURES / "minimal-cli-tool"
     result = subprocess.run(
         [sys.executable, "-m", "scripts.cli", str(fixture_path)],
-        capture_output=True, text=True,
+        capture_output=True, text=True, encoding="utf-8",
     )
     assert result.returncode == 0
     assert "Health score" in result.stdout

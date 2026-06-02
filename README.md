@@ -35,7 +35,7 @@ npx skills add ruijayfeng/aisurface@llms-txt
 aisurface .
 ```
 
-会输出一份报告：12 项检查、Health score (0-100)、🔴 Must-fix 清单。
+会输出一份报告：12 项检查、Health score (0-100)、🔴 Must-fix 清单。12 项按 4 个加权维度贡献总分（引用友好度 40 / 结构 30 / 可读性 20 / 覆盖 10），更准确反映哪个缺口最影响 AI 引用。
 
 ## 12 项审计清单
 

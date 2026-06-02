@@ -9,7 +9,13 @@ import sys
 from pathlib import Path
 
 from scripts import critic, distribution, github_meta, report, scanner
-from scripts.report import AuditReport, CheckResult, StructuralFinding
+from scripts.report import (
+    CATEGORY_CHECK_IDS,
+    AuditReport,
+    CheckResult,
+    StructuralFinding,
+    _compute_health_score,
+)
 from scripts.scanner import RepoAssets
 
 # AI search platforms tracked in references/ai-search-platforms.md.
@@ -225,9 +231,20 @@ def run_audit(repo_root: Path) -> AuditReport:
     if not isinstance(semantic, list):
         semantic = [semantic]
 
+    all_results = structural + semantic
+
+    # Bucket into the 4 weighted categories, then compute the weighted score.
+    categories = {
+        cat: [r for r in all_results if r.id in ids]
+        for cat, ids in CATEGORY_CHECK_IDS.items()
+    }
+    score, max_score = _compute_health_score(categories)
+
     return AuditReport(
         project_name=repo_root.name,
-        results=structural + semantic,
+        results=all_results,
+        health_score=score,
+        max_score=max_score,
     )
 
 

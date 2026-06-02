@@ -7,10 +7,29 @@ SUB_SCORE_MAX = 100
 MAX_MUST_FIX = 5
 MAX_SHOULD_FIX = 5
 
-# Map CheckResult.category to user-facing sub-score labels
+# Weighted health score: 40/30/20/10. The 4 categories reflect which gaps
+# hurt AI citation most (citation-friendliness outweighs raw distribution).
+CATEGORY_WEIGHTS: dict[str, int] = {
+    "citation_friendliness": 40,
+    "structure": 30,
+    "readability": 20,
+    "distribution": 10,
+}
+
+# Map each check id to one of the 4 weighted categories.
+CATEGORY_CHECK_IDS: dict[str, tuple[int, ...]] = {
+    "citation_friendliness": (4, 8, 9, 10),
+    "structure": (5, 6, 7),
+    "readability": (1, 2, 3),
+    "distribution": (11, 12),
+}
+
+# Map the 4 category keys to user-facing sub-score labels.
 CATEGORY_LABELS = {
-    "structural": "Structure",
-    "semantic": "Readability",
+    "citation_friendliness": "Citation-Friendliness (引用友好度)",
+    "structure": "Structure (结构)",
+    "readability": "Readability (可读性)",
+    "distribution": "Distribution (覆盖)",
 }
 
 
@@ -31,6 +50,8 @@ class CheckResult:
 class AuditReport:
     project_name: str
     results: list[CheckResult] = field(default_factory=list)
+    health_score: int = 0
+    max_score: int = 100
     skipped: list[CheckResult] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
 
@@ -47,30 +68,54 @@ def __getattr__(name: str):
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
-def _compute_health_score(results: list[CheckResult]) -> int:
-    if not results:
-        return 0
-    total = sum(r.score for r in results)
-    total_max = sum(r.max_score for r in results)
-    if total_max == 0:
-        return 0
-    return round(total / total_max * SUB_SCORE_MAX)
+def _compute_health_score(categories: dict[str, list[CheckResult]]) -> tuple[int, int]:
+    """Compute the weighted health score.
+
+    Args:
+        categories: dict mapping category name to list of CheckResults.
+                    Each category's contribution is (sum_score / sum_max) * weight.
+                    Total is the sum of category contributions, capped at 100.
+
+    Returns:
+        (score, max_score) where max_score is always 100.
+
+    Categories:
+        - citation_friendliness (40): checks #4, #8, #9, #10
+        - structure (30): checks #5, #6, #7
+        - readability (20): checks #1, #2, #3
+        - distribution (10): checks #11, #12
+    """
+    total = 0.0
+    for cat, results in categories.items():
+        if not results:
+            continue
+        cat_score = sum(r.score for r in results)
+        cat_max = sum(r.max_score for r in results)
+        if cat_max == 0:
+            continue
+        weight = CATEGORY_WEIGHTS.get(cat, 0)
+        total += (cat_score / cat_max) * weight
+    return round(total), 100
 
 
 def _compute_sub_scores(results: list[CheckResult]) -> list[tuple[str, int]]:
-    """Aggregate scores per category, mapped to user-friendly labels."""
+    """Aggregate scores per category, mapped to user-friendly labels.
+
+    Buckets are determined by CATEGORY_CHECK_IDS (not r.category), so the
+    4 sub-scores line up with the weighted health score.
+    """
     if not results:
         return []
-    by_category: dict[str, list[CheckResult]] = {}
-    for r in results:
-        by_category.setdefault(r.category, []).append(r)
     sub_scores: list[tuple[str, int]] = []
-    for category, items in by_category.items():
-        total = sum(r.score for r in items)
-        total_max = sum(r.max_score for r in items)
+    for cat_key, check_ids in CATEGORY_CHECK_IDS.items():
+        cat_results = [r for r in results if r.id in check_ids]
+        if not cat_results:
+            continue
+        total = sum(r.score for r in cat_results)
+        total_max = sum(r.max_score for r in cat_results)
         if total_max == 0:
             continue
-        label = CATEGORY_LABELS.get(category, category.title())
+        label = CATEGORY_LABELS.get(cat_key, cat_key.title())
         sub_scores.append((label, round(total / total_max * SUB_SCORE_MAX)))
     return sorted(sub_scores, key=lambda x: x[0])
 
@@ -119,14 +164,14 @@ def render_report(report: AuditReport, teacher_mode: bool = False) -> str:
         teacher_mode: When True, inject a short educational primer after each
             check's name. Used by `python -m scripts.cli --learn`.
     """
-    score = _compute_health_score(report.results)
+    score = report.health_score
     sub_scores = _compute_sub_scores(report.results)
     must_fix, should_fix, nice, deferred_count = _bucket_results(report.results)
 
     lines: list[str] = [
         f"# GEO Audit Report: {report.project_name}",
         "",
-        f"**Health score**: {score} / 100",
+        f"**Health score**: {score} / {report.max_score}",
         "",
     ]
 
