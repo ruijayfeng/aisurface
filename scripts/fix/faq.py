@@ -17,9 +17,7 @@ class FAQTemplate:
     @classmethod
     def for_project_type(cls, project_type: str) -> FAQTemplate:
         """Return a template for the given project type, falling back to 'generic'."""
-        if project_type in _TEMPLATES:
-            return _TEMPLATES[project_type]
-        return _TEMPLATES["generic"]
+        return _TEMPLATES.get(project_type, _TEMPLATES["generic"])
 
 
 _GENERIC_QA = [

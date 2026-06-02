@@ -1,6 +1,7 @@
 """Fix subcommand: generate and apply patches."""
 from __future__ import annotations
 
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -17,5 +18,5 @@ class Patch:
 
 def cmd_fix(args) -> int:
     """Stub - wired in Task 6."""
-    print("fix command not fully wired yet", file=__import__("sys").stderr)
+    print("fix command not fully wired yet", file=sys.stderr)
     return 1
