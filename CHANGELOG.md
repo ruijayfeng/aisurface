@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.1.2] - 2026-06-02
+
+### Added
+- `aisurface fix` subcommand: generates and applies patches for the 4 highest-impact must-fix items
+  - FAQ injection (templated 8 Q&A per project type, defaults to "generic")
+  - When-to-use stubs (both halves or just the missing one)
+  - `.well-known/llms.txt` (new file, per llmstxt.org spec)
+  - `index.schema.json` (SoftwareApplication + FAQPage)
+- `fix` flags: `--dry-run`, `--yes`, `--only=faq,when_to_use,llms_txt,schema_org`
+- Snapshot tests for patch output (`evals/expected_patches/`)
+
+### Changed
+- CLI now uses subparsers: `aisurface audit ./` (was `python -m scripts.cli ./`)
+- Old direct invocation `python -m scripts.cli ./` requires `audit` subcommand
+- `scripts/audit.py` split out from `scripts/cli.py` for separation of concerns
+
+### Tests
+- 89 tests passing (up from 67 in v0.1.1)
+
 ## [0.1.1] - 2026-06-02
 
 ### Added

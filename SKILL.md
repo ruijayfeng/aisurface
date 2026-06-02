@@ -52,10 +52,12 @@ A Markdown report with:
 
 ## Action options
 
-After the report, pick:
-- **Just review** (default): user reads report, modifies themselves
-- **Auto-fix**: invoke `aisurface@readme` or `aisurface@llms-txt` for the must-fix items
-- **Generate diffs**: `--patch` flag generates a unified diff for the top 3 must-fixes
+After the audit report, run `aisurface fix .` to generate patches for must-fix items.
+
+- `aisurface fix .` — interactive: shows what would change, confirms before writing
+- `aisurface fix . --dry-run` — preview only, no writes
+- `aisurface fix . --yes` — apply all without confirmation
+- `aisurface fix . --only=faq,llms_txt` — only specific patch types
 
 ## What it does NOT do
 
