@@ -221,3 +221,6 @@ __marimo__/
 
 # Internal release handoff (kept local, not committed)
 RELEASE_HANDOFF.md
+
+# Git worktrees (per superpowers:using-git-worktrees)
+.worktrees/
