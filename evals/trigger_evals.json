@@ -1,0 +1,20 @@
+[
+  {"query": "看看我的 GitHub 项目能不能被 AI 搜到,我担心 ChatGPT 不会引用", "should_trigger": true},
+  {"query": "audit my open-source repo for AI-search citation readiness", "should_trigger": true},
+  {"query": "我的 README 写得太烂了,按 GEO 最佳实践重写一下", "should_trigger": true},
+  {"query": "is there a way to check if my project shows up in Perplexity answers", "should_trigger": true},
+  {"query": "fix my README so ChatGPT and Claude cite my project", "should_trigger": true},
+  {"query": "诊断一下 ~/code/my-project 的 GEO 现状", "should_trigger": true},
+  {"query": "I just published a CLI tool, how do I make it AI-citation-friendly", "should_trigger": true},
+  {"query": "我的项目 .well-known/llms.txt 没有,你能帮我加一个吗", "should_trigger": true},
+  {"query": "verify whether my project gets cited by DeepSeek or 豆包", "should_trigger": true},
+  {"query": "我开源了一个 Python 库,怎么让 AI 搜索优先推荐它", "should_trigger": true},
+  {"query": "what is GEO and why does it matter for SEO", "should_trigger": false},
+  {"query": "audit my company's marketing landing page for Google SEO", "should_trigger": false},
+  {"query": "write a good README for my new GitHub repo", "should_trigger": false},
+  {"query": "how do I get more stars on my GitHub project", "should_trigger": false},
+  {"query": "scan my closed-source internal API docs for AI search visibility", "should_trigger": false},
+  {"query": "improve my Medium blog post for ChatGPT search", "should_trigger": false},
+  {"query": "should I migrate from SEO to AEO for my SaaS site", "should_trigger": false},
+  {"query": "audit my Shopify store for AI-recommendation visibility", "should_trigger": false}
+]
