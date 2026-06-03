@@ -5,11 +5,15 @@
 [English](./README.en.md) | [中文](./README.md)
 
 ```bash
-pip install aisurface
+npx skills add ruijayfeng/aisurface
+```
 
-aisurface audit ./        # diagnose: 12-check GEO report
-aisurface fix ./          # treat: auto-apply patches
-aisurface verify ./       # prove: probe AI platforms for citation lift
+After install, just say "audit my project" — the skill handles the Python environment itself.
+
+```text
+"is my project AI-citation-friendly"     →  diagnose
+"fix my README for AI search"            →  treat
+"does my project show up in AI search"   →  prove
 ```
 
 ![audit](docs/screenshots/audit.png)
@@ -73,8 +77,19 @@ See [case-studies/ziwei-v100.md](./case-studies/ziwei-v100.md).
 
 ## Installation
 
+Primary path (recommended):
+
+```bash
+npx skills add ruijayfeng/aisurface
+```
+
+After install, just say "audit my project" — the skill handles the Python environment itself.
+
+Alternative (for CI or non-Claude-Code users):
+
 ```bash
 pip install aisurface
+aisurface audit ./
 ```
 
 ## Contributing
