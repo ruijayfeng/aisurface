@@ -3,9 +3,9 @@
  * [OUTPUT]: Provides `generate_llms_txt_patch(repo_root) -> Patch | None`. If `.well-known/llms.txt` already exists, returns None. Otherwise returns a `Patch` writing a valid llms.txt body to that path, with project name + description + a single "Docs" section.
  * [POS]: One of the four `fix` patch generators. Imported lazily by `fix.cmd_fix`. Targets check #6 (llms.txt presence) in the audit. Composes with `scripts/llms_txt.py` (the audit-side reader and shared builder).
  * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
-"""
 
-"""llms.txt patch: generates a valid .well-known/llms.txt file."""
+llms.txt patch: generates a valid .well-known/llms.txt file.
+"""
 from __future__ import annotations
 
 import re

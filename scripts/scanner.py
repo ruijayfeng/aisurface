@@ -3,9 +3,9 @@
  * [OUTPUT]: Provides `scan_repo(root) -> RepoAssets` dataclass, `RepoAssets.to_dict()`, `PROJECT_MARKERS`, `IGNORE_DIRS`, `_detect_project_type(root)`, `_iter_relevant_files(root, pattern)`.
  * [POS]: Repo-inventory layer. Called by `audit.run_audit`, `fix.cmd_fix`, and `verify.cmd_verify`. The single source of truth for "what files does this project have".
  * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
-"""
 
-"""Detect and inventory GEO-relevant files in a project repository."""
+Detect and inventory GEO-relevant files in a project repository.
+"""
 from __future__ import annotations
 
 import fnmatch

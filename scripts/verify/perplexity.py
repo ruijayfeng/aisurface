@@ -3,9 +3,9 @@
  * [OUTPUT]: Provides `PerplexityAdapter` class — implements the `ProbeAdapter` Protocol via `probe(query) -> ProbeResult` (queries Perplexity, parses cited sources, returns whether the project URL/name appears in the citations). Returns `cited=False` and an actionable error if the API key is missing or the call fails.
  * [POS]: The first concrete `ProbeAdapter` implementation. Imported by `verify.cmd_verify`. Future adapters (DeepSeek, ChatGPT) follow the same Protocol.
  * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
-"""
 
-"""Perplexity AI search adapter."""
+Perplexity AI search adapter.
+"""
 from __future__ import annotations
 
 import httpx

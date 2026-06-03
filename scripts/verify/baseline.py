@@ -3,9 +3,9 @@
  * [OUTPUT]: Provides `BaselineStore` class with `save(platform, results)`, `load(platform) -> list[ProbeResult] | None`, and a module-level `diff_summary(baseline, current) -> str` helper that prints "baseline cited X/N → current cited Y/N, delta +Z".
  * [POS]: Persistence layer for `verify`. Imported by `verify.cmd_verify`. First run with `--baseline` is the baseline; subsequent runs diff against it. If no baseline exists, the current run becomes the baseline.
  * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
-"""
 
-"""Baseline store for verify command. Stores per-project, per-platform citation results."""
+Baseline store for verify command. Stores per-project, per-platform citation results.
+"""
 from __future__ import annotations
 
 import hashlib

@@ -3,9 +3,9 @@
  * [OUTPUT]: Provides `generate_faq_patch(repo_root, *, project_type) -> Patch | None`. If a `## FAQ` section already exists, returns None. Otherwise returns a `Patch` with templated 8 Q&A stubs (project-type-aware) targeting `README.md`.
  * [POS]: One of the four `fix` patch generators. Imported lazily by `fix.cmd_fix`. Targets check #2 (FAQ section) and check #8 (semantic FAQ quality) in the audit.
  * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
-"""
 
-"""FAQ injection patch: adds 8 Q&A stubs to README."""
+FAQ injection patch: adds 8 Q&A stubs to README.
+"""
 from __future__ import annotations
 
 import re

@@ -3,9 +3,8 @@
  * [OUTPUT]: Provides `@safe_check` decorator that catches exceptions raised inside a check function and converts them to a `CheckResult` with `skipped=True` and an `error` field.
  * [POS]: Reliability layer. Wraps every check in `audit.run_audit` so one bad check never aborts the whole audit. Imported by `audit.py`.
  * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
-"""
 
-"""safe_check decorator: wrap audit checks so a single failure doesn't abort the audit.
+safe_check decorator: wrap audit checks so a single failure doesn't abort the audit.
 
 v0.1.1 stages this decorator as a v0.3 interface. The 12 production checks
 in v0.1.1 are all deterministic and never throw, so the catch path is

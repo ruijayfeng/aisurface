@@ -3,9 +3,8 @@
  * [OUTPUT]: Provides `offline_critique(readme, ...) -> list[CheckResult]` (regex-based semantic checks for checks #1, #2, #3, #4, #8, #9, #10, #12).
  * [POS]: Semantic-check layer. The `--llm` flag in v0.1.4 will introduce `llm_critique(...)` as a parallel strategy selectable by the CLI; until then `offline_critique` is the only path.
  * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
-"""
 
-"""LLM-based GEO critic with offline fallback for v0.1.
+LLM-based GEO critic with offline fallback for v0.1.
 
 The offline critic uses simple heuristics. A future version (v0.3) can
 swap in a real LLM call via `critique_with_llm()`.

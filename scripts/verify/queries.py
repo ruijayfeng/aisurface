@@ -3,9 +3,9 @@
  * [OUTPUT]: Provides `generate_queries(assets, *, n=10) -> list[str]`. Returns a list of natural-language AI-search queries an actual user would type to discover a project of this type — e.g., "best Python CLI for X" for a python-cli project, "what is a GEO audit tool" for a python-lib named aisurface. Deterministic (seeded by project name) so reruns are comparable.
  * [POS]: Query generator. Imported by `verify.cmd_verify`. The 10 (default) queries are sent to every platform in the probe; baseline diff is computed over the same query set per run.
  * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
-"""
 
-"""Generate representative AI-search queries for a project."""
+Generate representative AI-search queries for a project.
+"""
 from __future__ import annotations
 
 from pathlib import Path

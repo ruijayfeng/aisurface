@@ -3,9 +3,9 @@
  * [OUTPUT]: Provides `build_parser()`, `main(argv)`, console-script target `aisurface = scripts.cli:main`.
  * [POS]: Single CLI entry point. Dispatches to audit/fix/verify subcommands. Imported by `pyproject.toml`'s `[project.scripts]`.
  * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
-"""
 
-"""CLI entry point. Dispatches to audit/fix/verify subcommands."""
+CLI entry point. Dispatches to audit/fix/verify subcommands.
+"""
 from __future__ import annotations
 
 import argparse

@@ -3,9 +3,9 @@
  * [OUTPUT]: Provides `AuditReport`, `CheckResult` dataclasses; `CATEGORY_WEIGHTS` (40/30/20/10), `CATEGORY_CHECK_IDS`, `CATEGORY_LABELS`; `render_report(report, teacher_mode, wrap)`, `_compute_health_score(categories)`, `_compute_sub_scores(results)`, `_bucket_results(results)`, `_format_check_line(r, ...)`.
  * [POS]: Reporting layer. Imported by `audit.py` (to construct results) and `cli.py` (to render). Owns the weighted-score math and must/should/nice bucketing.
  * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
-"""
 
-"""Render GEO audit reports as Markdown."""
+Render GEO audit reports as Markdown.
+"""
 from __future__ import annotations
 
 from collections.abc import Callable

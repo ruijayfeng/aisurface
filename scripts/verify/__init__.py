@@ -3,9 +3,9 @@
  * [OUTPUT]: Provides `ProbeResult` dataclass (platform, query, cited, sources) and `cmd_verify(args) -> int` (CLI dispatch target for the `verify` subcommand). Generates queries, probes each platform, loads/stores baseline, prints diff_summary.
  * [POS]: Verify subcommand core. Imported by `cli.py`. Dispatcher layer that sits above the per-platform adapters, the query generator, and the baseline store.
  * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
-"""
 
-"""Verify subcommand: probe AI platforms for citation rate."""
+Verify subcommand: probe AI platforms for citation rate.
+"""
 from __future__ import annotations
 
 import os
