@@ -296,6 +296,29 @@ Eight unit tests, one per check, plus exit-code boundary cases:
 
 Unchanged. All 105 current tests must still pass.
 
+## Regression coverage (existing functionality that must keep working)
+
+Per the v1.0.2 release constraint "将已有的功能都要保持可用", every existing capability must be verified intact:
+
+| Existing capability | How we verify it still works |
+|---|---|
+| 3-verb CLI (`audit` / `fix` / `verify`) | All 105 existing pytest tests pass on all 15 CI matrix jobs (3 OS × 5 Python) |
+| `aisurface` console script generation | `pip install -e .` produces a working `aisurface` (or `aisurface.exe` on Windows) that exits 0 on `--help` — verified in CI smoke step |
+| `python -m scripts.cli` entry | Same: exits 0 on `--help` — verified in CI smoke step on all 15 jobs |
+| `SKILL.md` natural-language triggers for audit/fix/verify | Manual review: trigger phrases in SKILL.md still map to the same commands (no regressions in dispatch table) |
+| 12-check audit rubric | Test fixtures (`evals/fixtures/`) pass with the same expected scores as v1.0.1: `bad-readme-python-lib` → 16/100, `perfect-readme-and-docs` → 90+ |
+| `fix` 4 patch generators | Snapshot tests in `evals/expected_patches/` unchanged; `fix --dry-run` on `bad-readme-python-lib` produces the same 4 patches |
+| `verify` Perplexity probe | Adapter test still passes; baseline store at `~/.aisurface/baselines/` still works |
+| `npx skills add ruijayfeng/aisurface` flow | Out of band for this release — the skill itself is unchanged. README install section still leads with this command |
+| README 5-min self-test | Steps 1–5 from the v1.0.1 README still pass deterministically (after the rewrite to use `python -m scripts.cli`) |
+| L1/L2/L3 GEB fractal docs | L1 (`/CLAUDE.md`), L2 (`scripts/CLAUDE.md`), L3 (every `scripts/*.py` file header) all remain consistent — the new files (`doctor.py`, `safe_dispatch.py`) get the same L3 treatment, and L1/L2 are updated to mention them |
+
+The "no regression" bar is enforced by:
+- 105 existing pytest tests must pass (zero skipped, zero marked xfail, zero modified)
+- All 4 evals/fixtures must produce their expected audit scores
+- CI smoke runs both `aisurface` and `python -m scripts.cli` on all 15 jobs
+- Manual end-to-end run of the 5-min self-test on a clean Windows VM (post-release verification, not in CI)
+
 ## CI smoke (covered above)
 
 `python -m scripts.cli doctor --no-color` runs in the CI matrix on all 15 jobs and must exit 0 (the PyPI network call is the only thing that could realistically fail; if it does, it's a warn, not fail).
@@ -324,7 +347,7 @@ Unchanged. All 105 current tests must still pass.
 | `CLAUDE.md` (L1) | Add the two new files to the `scripts/` directory tree |
 | `README.md` | 5-min self-test rewritten to use `python -m scripts.cli`; add step 8 (doctor) |
 | `README.en.md` | Same |
-| `SKILL.md` | Tool dispatch table updated; add `doctor` row |
+| `SKILL.md` | Tool dispatch table gets a new row mapping natural-language triggers (e.g. "我的 aisurface 装对了吗", "装坏了", "命令找不到", "diagnose installation") → `python -m scripts.cli doctor`. **No command name exposed to the user surface** — this is spec §11b "user-facing abstraction". No new subcommand is mentioned in the user-facing "我能做三件事" / "怎么跟我说" sections |
 | `CHANGELOG.md` | New `## [1.0.2] - 2026-06-03` section |
 | `ROADMAP.md` | New v1.0.2 row |
 | `pyproject.toml` | Version bump `1.0.1` → `1.0.2` |
