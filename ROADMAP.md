@@ -27,7 +27,8 @@ aisurface verify ./        # prove: probe AI platforms for citation rate
 | v0.1.2 | `fix` command — 4 patch generators (FAQ, when-to-use, llms.txt, schema.org) | ✅ shipped 2026-06-02 |
 | v0.1.3 | `verify` command — Perplexity adapter + baseline store | ✅ shipped 2026-06-02 |
 | **v1.0.0** | **Consolidate 3 skills → 1 unified `aisurface` skill, PyPI publish, screenshots, ziwei re-dogfood** | ✅ shipped 2026-06-02 |
-| **v1.0.1** | **Skill abstraction principle — single natural-language-facing SKILL.md, GEB fractal docs (L1/L2/L3), §11b in spec, skill-first install story across README/ROADMAP** | ⏳ in progress 2026-06-03 |
+| **v1.0.1** | **Skill abstraction principle — single natural-language-facing SKILL.md, GEB fractal docs (L1/L2/L3), §11b in spec, skill-first install story across README/ROADMAP** | ✅ shipped 2026-06-03 |
+| **v1.0.2** | **Windows install / PATH hotfix — `aisurface doctor` self-check + `safe_dispatch` error wrapper + 15-job CI matrix (3 OS × 5 Python). README 5-min self-test now uses `python -m scripts.cli` (cross-platform).** | ✅ shipped 2026-06-03 |
 | v0.1.4 (optional) | `--llm` flag — swap regex critic for real LLM | ⏳ optional |
 | v1.1.0 | Remove `skills/_deprecated/` (one release deprecation cycle complete); add more platform adapters per real-user signal | ⏳ planned |
 
