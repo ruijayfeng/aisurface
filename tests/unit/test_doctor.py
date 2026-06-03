@@ -138,3 +138,74 @@ def test_check_deps_importable_fail(monkeypatch):
     assert c.status == "fail"
     assert "jsonschema" in c.message
     assert "pip install --force-reinstall aisurface" in c.fix_hints[0]
+
+
+# -- Check 5: cache dir writable -------------------------------------------
+
+def test_check_cache_dir_writable_pass(tmp_path, monkeypatch):
+    monkeypatch.setenv("AISURFACE_CACHE_DIR", str(tmp_path))
+    from scripts.doctor import check_cache_dir_writable
+    c = check_cache_dir_writable()
+    assert c.status == "pass"
+    assert str(tmp_path) in c.message
+
+
+def test_check_cache_dir_writable_create_succeeds(tmp_path, monkeypatch):
+    nonexistent = tmp_path / "newsubdir"
+    assert not nonexistent.exists()
+    monkeypatch.setenv("AISURFACE_CACHE_DIR", str(nonexistent))
+    from scripts.doctor import check_cache_dir_writable
+    c = check_cache_dir_writable()
+    assert c.status == "pass"
+    assert nonexistent.exists()
+
+
+def test_check_cache_dir_writable_not_writable(tmp_path, monkeypatch):
+    # On Windows, os.access(W_OK) often returns True even for read-only dirs.
+    # So we mock os.access to force the fail path.
+    cache = tmp_path / "ro"
+    cache.mkdir()
+    monkeypatch.setenv("AISURFACE_CACHE_DIR", str(cache))
+    import scripts.doctor as d
+    monkeypatch.setattr(d.os, "access", lambda path, mode: False)
+    c = d.check_cache_dir_writable()
+    assert c.status == "fail"
+    assert "not writable" in c.message
+
+
+def test_check_cache_dir_writable_create_fails(tmp_path, monkeypatch):
+    """When mkdir raises (e.g., parent doesn't exist + no write), the check fails."""
+    bad = tmp_path / "nonexistent_parent" / "cache"
+    monkeypatch.setenv("AISURFACE_CACHE_DIR", str(bad))
+    # Don't mock anything; the real mkdir should fail because the parent
+    # doesn't exist AND os.access on the parent returns False (since it
+    # doesn't exist). Force the failure by mocking mkdir to raise.
+    import scripts.doctor as d
+    real_mkdir = d.Path.mkdir
+
+    def fake_mkdir(self, *args, **kwargs):
+        if str(self) == str(bad):
+            raise OSError("simulated mkdir failure")
+        return real_mkdir(self, *args, **kwargs)
+
+    monkeypatch.setattr(d.Path, "mkdir", fake_mkdir)
+    c = d.check_cache_dir_writable()
+    assert c.status == "fail"
+    assert "can't create" in c.message
+
+
+# -- Check 8: PERPLEXITY_API_KEY -------------------------------------------
+
+def test_check_perplexity_api_key_present(monkeypatch):
+    monkeypatch.setenv("PERPLEXITY_API_KEY", "pplx-test-token")
+    from scripts.doctor import check_perplexity_api_key
+    c = check_perplexity_api_key()
+    assert c.status == "pass"
+
+
+def test_check_perplexity_api_key_missing(monkeypatch):
+    monkeypatch.delenv("PERPLEXITY_API_KEY", raising=False)
+    from scripts.doctor import check_perplexity_api_key
+    c = check_perplexity_api_key()
+    assert c.status == "warn"
+    assert "https://perplexity.ai/account/api" in c.fix_hints[0]
