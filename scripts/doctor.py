@@ -24,9 +24,10 @@ import os
 import shutil
 import sys
 import sysconfig
+from collections.abc import Callable
 from importlib.metadata import version as _pkg_version
 from pathlib import Path
-from typing import Callable, Literal
+from typing import Literal
 
 import httpx
 

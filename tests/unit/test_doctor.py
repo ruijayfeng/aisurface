@@ -4,10 +4,10 @@ from __future__ import annotations
 import dataclasses
 import json
 
-import pytest
+import httpx
 
-from scripts import doctor
-from scripts.doctor import DoctorCheck, cmd_doctor, render_human, render_json
+import scripts.doctor as d
+from scripts.doctor import DoctorCheck, render_human, render_json
 
 
 def test_doctor_check_dataclass_defaults():
@@ -213,9 +213,6 @@ def test_check_perplexity_api_key_missing(monkeypatch):
 
 # -- Check 6: PyPI latest version -----------------------------------------
 
-import httpx
-
-
 class _FakePyPIResp:
     def __init__(self, version: str):
         self._payload = {"info": {"version": version}}
@@ -327,9 +324,6 @@ def test_cmd_doctor_exit_2_when_python_too_old(monkeypatch, capsys):
 
 
 def test_cmd_doctor_json_output(monkeypatch, capsys):
-    import json
-    import scripts.doctor as d
-
     def passing_check():
         return d.DoctorCheck(name="x", status="pass", message="ok")
 
