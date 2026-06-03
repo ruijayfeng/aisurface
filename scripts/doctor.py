@@ -1,6 +1,6 @@
 """
  * [INPUT]: Depends on `sys` (version, argv), `os` (env, access), `shutil` (which), `importlib`, `importlib.metadata`, `pathlib.Path`, `sysconfig`, `httpx` (already a dep), `dataclasses`, `json`, `scripts.colors`.
- * [OUTPUT]: Provides `cmd_doctor(args) -> int`, `DoctorCheck` dataclass, 8 check_* functions, `render_human` / `render_json` for output. Used by `scripts/cli.py` as the 4th subcommand.
+ * [OUTPUT]: Provides `cmd_doctor(args) -> int`, `DoctorCheck` dataclass, 7 check_* functions (internet reachability is implicit in check_pypi_latest_version), `render_human` / `render_json` for output. Used by `scripts/cli.py` as the 4th subcommand.
  * [POS]: scripts/ — install-health self-check. Catches stale-version, PATH, deps, cache issues that audit/fix/verify can't see. Sits alongside the 3 business verbs.
  * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
 
