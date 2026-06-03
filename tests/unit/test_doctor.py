@@ -209,3 +209,68 @@ def test_check_perplexity_api_key_missing(monkeypatch):
     c = check_perplexity_api_key()
     assert c.status == "warn"
     assert "https://perplexity.ai/account/api" in c.fix_hints[0]
+
+
+# -- Check 6: PyPI latest version -----------------------------------------
+
+import httpx
+
+
+class _FakePyPIResp:
+    def __init__(self, version: str):
+        self._payload = {"info": {"version": version}}
+
+    def raise_for_status(self):
+        pass
+
+    def json(self):
+        return self._payload
+
+
+def test_check_pypi_latest_up_to_date(monkeypatch):
+    import scripts.doctor as d
+    monkeypatch.setattr(d, "_pkg_version", lambda name: "1.0.2")
+    monkeypatch.setattr(d.httpx, "get", lambda *a, **kw: _FakePyPIResp("1.0.2"))
+    c = d.check_pypi_latest_version()
+    assert c.status == "pass"
+    assert "up to date" in c.message
+
+
+def test_check_pypi_latest_newer_available(monkeypatch):
+    import scripts.doctor as d
+    monkeypatch.setattr(d, "_pkg_version", lambda name: "1.0.1")
+    monkeypatch.setattr(d.httpx, "get", lambda *a, **kw: _FakePyPIResp("1.0.2"))
+    c = d.check_pypi_latest_version()
+    assert c.status == "warn"
+    assert "1.0.1 installed" in c.message
+    assert "1.0.2 available" in c.message
+    assert "pip install --upgrade aisurface" in c.fix_hints
+
+
+def test_check_pypi_latest_prerelease_ahead(monkeypatch):
+    import scripts.doctor as d
+    monkeypatch.setattr(d, "_pkg_version", lambda name: "1.1.0a1")
+    monkeypatch.setattr(d.httpx, "get", lambda *a, **kw: _FakePyPIResp("1.0.2"))
+    c = d.check_pypi_latest_version()
+    assert c.status == "pass"
+    assert "pre-release" in c.message.lower() or "newer than PyPI" in c.message
+
+
+def test_check_pypi_network_error_warns(monkeypatch):
+    import scripts.doctor as d
+    monkeypatch.setattr(d, "_pkg_version", lambda name: "1.0.2")
+
+    def boom(*a, **kw):
+        raise httpx.ConnectError("simulated DNS failure")
+
+    monkeypatch.setattr(d.httpx, "get", boom)
+    c = d.check_pypi_latest_version()
+    assert c.status == "warn"
+    assert "couldn't reach PyPI" in c.message
+
+
+def test_check_pypi_skipped_with_flag():
+    from scripts.doctor import check_pypi_latest_version
+    c = check_pypi_latest_version(skip_network=True)
+    assert c.status == "warn"
+    assert "skipped" in c.message
