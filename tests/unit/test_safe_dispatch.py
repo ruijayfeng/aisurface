@@ -8,7 +8,7 @@ import pytest
 from scripts.safe_dispatch import safe_dispatch
 
 
-def test_catches_module_not_found_for_scripts(capsys):
+def test_catches_module_not_found(capsys):
     """safe_dispatch catches ModuleNotFoundError when the missing module is in scripts.*"""
 
     @safe_dispatch
@@ -21,7 +21,7 @@ def test_catches_module_not_found_for_scripts(capsys):
     assert "✗" in captured.err
 
 
-def test_catches_file_not_found_and_includes_path(capsys):
+def test_catches_file_not_found(capsys):
     """safe_dispatch catches FileNotFoundError and includes args.path in the hint"""
 
     @safe_dispatch
@@ -37,7 +37,7 @@ def test_catches_file_not_found_and_includes_path(capsys):
     assert "路径不存在" in captured.err
 
 
-def test_catches_unicode_encode_error(capsys):
+def test_catches_unicode_error(capsys):
     """safe_dispatch catches UnicodeEncodeError and hints at PYTHONUTF8"""
 
     @safe_dispatch
@@ -50,7 +50,7 @@ def test_catches_unicode_encode_error(capsys):
     assert "PYTHONUTF8" in captured.err
 
 
-def test_catches_permission_error_on_cache_dir(capsys, monkeypatch):
+def test_catches_permission_error(capsys, monkeypatch):
     """safe_dispatch catches PermissionError on the cache dir and hints at AISURFACE_CACHE_DIR"""
     monkeypatch.setenv("AISURFACE_CACHE_DIR", "/var/cache/aisurface")
 
@@ -84,4 +84,26 @@ def test_does_not_catch_value_error():
         raise ValueError("not for us")
 
     with pytest.raises(ValueError, match="not for us"):
+        handler(SimpleNamespace())
+
+
+def test_does_not_catch_module_not_found_for_unrelated_module():
+    """safe_dispatch must NOT catch ModuleNotFoundError for non-scripts.* modules; re-raise"""
+
+    @safe_dispatch
+    def handler(args):
+        raise ModuleNotFoundError("No module named 'pandas'")
+
+    with pytest.raises(ModuleNotFoundError):
+        handler(SimpleNamespace())
+
+
+def test_does_not_catch_permission_error_on_unrelated_path():
+    """safe_dispatch must NOT catch PermissionError for non-cache paths; re-raise"""
+
+    @safe_dispatch
+    def handler(args):
+        raise PermissionError(13, "Permission denied", "/etc/passwd")
+
+    with pytest.raises(PermissionError):
         handler(SimpleNamespace())

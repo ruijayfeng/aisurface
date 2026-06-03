@@ -26,50 +26,46 @@ import functools
 import os
 import sys
 from collections.abc import Callable
+from typing import Any
 
 from scripts import colors
 
 
 def _hint(msg: str) -> None:
-    """Print a red ✗ hint line to stderr."""
-    print(f"  {colors.colorize('✗', 'red')} {msg}", file=sys.stderr)
+    """Print a red hint line to stderr (msg may include a leading ✗)."""
+    print(f"  {colors.colorize(msg, 'red')}", file=sys.stderr)
 
 
 def safe_dispatch(handler: Callable[..., int]) -> Callable[..., int]:
     """Wrap a CLI subcommand handler to catch user-facing errors.
 
     The handler is expected to take the argparse `args` namespace as its
-    first positional argument and return an int exit code.
+    only positional argument and return an int exit code.
     """
     @functools.wraps(handler)
-    def wrapper(*args, **kwargs) -> int:
+    def wrapper(args: Any) -> int:
         try:
-            return handler(*args, **kwargs)
+            return handler(args)
         except ModuleNotFoundError as e:
             # Only catch if the missing module is ours; pandas/httpx/etc.
             # errors are real bugs, not user-install problems.
             if "scripts." not in str(e):
                 raise
-            _hint(
-                f"Internal module not found: {e}. "
-                f"Try `pip install -e .` or reinstall the skill."
-            )
+            _hint("✗ aisurface 没装(或装错环境). 跑: pip install aisurface")
             return 1
-        except FileNotFoundError as e:
-            path = getattr(args[0], "path", "<unknown>") if args else "<unknown>"
-            _hint(f"路径不存在: {path} ({e})")
+        except FileNotFoundError:
+            path = getattr(args, "path", "<unknown>")
+            _hint(f"✗ 路径不存在: {path}. 检查下路径再试")
             return 1
-        except UnicodeEncodeError as e:
-            _hint(
-                f"Console encoding error: {e}. "
-                f"Hint: set PYTHONUTF8=1 (or `chcp 65001` on Windows)."
-            )
+        except UnicodeEncodeError:
+            _hint("✗ 控制台编码有问题. 设 PYTHONUTF8=1 和 PYTHONIOENCODING=utf-8")
             return 1
         except PermissionError as e:
-            cache = os.environ.get("AISURFACE_CACHE_DIR", "<unset>")
-            _hint(
-                f"Permission denied on cache dir {cache}: {e}. "
-                f"Hint: check AISURFACE_CACHE_DIR or directory permissions."
-            )
-            return 1
+            cache_env = os.environ.get("AISURFACE_CACHE_DIR")
+            default_cache = "~/.aisurface"
+            cache_str = cache_env or default_cache
+            if cache_str in str(e) or default_cache in str(e):
+                _hint(f"✗ 写不进 {cache_str}. 看权限,或设 AISURFACE_CACHE_DIR 改路径")
+                return 1
+            raise
     return wrapper
