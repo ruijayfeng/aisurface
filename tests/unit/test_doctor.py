@@ -274,3 +274,81 @@ def test_check_pypi_skipped_with_flag():
     c = check_pypi_latest_version(skip_network=True)
     assert c.status == "warn"
     assert "skipped" in c.message
+
+
+# -- cmd_doctor: exit codes, --json, --no-color, Python short-circuit ------
+
+
+class _Args:
+    def __init__(self, json: bool = False, no_color: bool = False, skip_network: bool = False):
+        self.json = json
+        self.no_color = no_color
+        self.skip_network = skip_network
+
+
+def test_cmd_doctor_exit_0_all_pass(monkeypatch, capsys):
+    import scripts.doctor as d
+
+    def passing_check():
+        return d.DoctorCheck(name="x", status="pass", message="ok")
+
+    # NOTE: cmd_doctor calls check_python_version() directly and then iterates
+    # _ALL_CHECK_FUNCS[1:] — index 0 is reserved for the python check. The
+    # patched list must therefore be [check_python_version, custom_check] so
+    # the custom check is actually invoked during iteration.
+    monkeypatch.setattr(d, "_ALL_CHECK_FUNCS", [d.check_python_version, passing_check])
+    rc = d.cmd_doctor(_Args(skip_network=True))
+    assert rc == 0
+
+
+def test_cmd_doctor_exit_1_when_one_fails(monkeypatch):
+    import scripts.doctor as d
+
+    def failing_check():
+        return d.DoctorCheck(name="x", status="fail", message="bad", fix_hints=["h"])
+
+    monkeypatch.setattr(d, "_ALL_CHECK_FUNCS", [d.check_python_version, failing_check])
+    rc = d.cmd_doctor(_Args(skip_network=True))
+    assert rc == 1
+
+
+def test_cmd_doctor_exit_2_when_python_too_old(monkeypatch, capsys):
+    import scripts.doctor as d
+    saved = d.sys.version_info
+    d.sys.version_info = (3, 9, 0, "final", 0)
+    try:
+        rc = d.cmd_doctor(_Args())
+    finally:
+        d.sys.version_info = saved
+    assert rc == 2
+    out = capsys.readouterr().out
+    assert "3.9.0" in out
+    assert "https://www.python.org/downloads" in out
+
+
+def test_cmd_doctor_json_output(monkeypatch, capsys):
+    import json
+    import scripts.doctor as d
+
+    def passing_check():
+        return d.DoctorCheck(name="x", status="pass", message="ok")
+
+    monkeypatch.setattr(d, "_ALL_CHECK_FUNCS", [d.check_python_version, passing_check])
+    rc = d.cmd_doctor(_Args(json=True, skip_network=True))
+    assert rc == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["summary"]["exit_code"] == 0
+    # checks[0] is python_version (called directly); checks[1] is the patched "x".
+    assert payload["checks"][1]["name"] == "x"
+
+
+def test_cmd_doctor_no_color_strips_ansi(monkeypatch, capsys):
+    import scripts.doctor as d
+
+    def passing_check():
+        return d.DoctorCheck(name="x", status="pass", message="ok")
+
+    monkeypatch.setattr(d, "_ALL_CHECK_FUNCS", [d.check_python_version, passing_check])
+    d.cmd_doctor(_Args(no_color=True, skip_network=True))
+    out = capsys.readouterr().out
+    assert "\x1b[" not in out
