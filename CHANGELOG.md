@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.1] - 2026-06-03
+
+### Added
+- **User-facing abstraction principle** (spec §11b): unified `SKILL.md` exposes capabilities in plain language; hides CLI flags, subcommand names, and storage paths from skill consumers
+- 18 trigger-eval queries (`evals/trigger_evals.json`: 10 should-trigger, 8 should-not) for SKILL.md description optimization
+- **GEB fractal documentation system**: L1 in `CLAUDE.md`, L2 in each module's `CLAUDE.md` (scripts/, skills/, references/, tests/, evals/), L3 `INPUT/OUTPUT/POS/PROTOCOL` file headers in all 23 `scripts/*.py`
+
+### Changed
+- `README.md` and `README.en.md` now lead with `npx skills add ruijayfeng/aisurface`; `pip install` reframed as an implementation detail invoked by the skill on first run
+- `ROADMAP.md` aligned with the skill-first install story
+
+### Fixed
+- L3 file headers: `from __future__ import annotations` is now the first statement in all 23 `scripts/*.py` (was broken when L3 was a separate string preceding the original docstring, which Python rejected as a non-future import)
+
 ## [1.0.0] - 2026-06-02
 
 ### Added
