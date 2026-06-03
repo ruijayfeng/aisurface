@@ -2,12 +2,12 @@
 > L2 | Parent: /CLAUDE.md
 
 ## Member List
-- `unit/`: Pure unit tests (each script's logic in isolation). Currently covers `audit`, `scanner`, `report`, `colors`, `concepts`, `safe_check`, `llms_txt`, `schema_gen`, `critic`, `findings`, `distribution`, `github_meta`.
+- `unit/`: Pure unit tests (each script's logic in isolation). Currently covers `audit`, `scanner`, `report`, `colors`, `concepts`, `safe_check`, `safe_dispatch`, `llms_txt`, `schema_gen`, `critic`, `findings`, `distribution`, `github_meta`, `doctor`, and `cli_dispatch`.
 - `integration/`: End-to-end tests that run the CLI as a subprocess. Currently `test_full_audit.py` exercises `python -m scripts.cli audit <fixture> --json` against the 4 eval fixtures.
 - `evals/` (NOTE: this is a different directory — the eval fixtures live at `/evals/`, not under tests).
 
 ## Invariants
-- 67 tests passing as of v0.1.1.
+- 128 non-eval + 12 eval = 140 tests passing as of v1.0.2.
 - Marker `eval` is defined in `pyproject.toml`; deselect with `pytest -m "not eval"`.
 - Every new `scripts/*.py` file must have a corresponding `tests/unit/test_<name>.py`.
 
