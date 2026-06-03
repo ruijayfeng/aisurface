@@ -1,10 +1,10 @@
 """
- * [INPUT]: Depends on `argparse` (stdlib), `scripts.audit.cmd_audit`, `scripts.fix.cmd_fix`, `scripts.verify.cmd_verify`, `scripts.safe_dispatch.safe_dispatch`, `scripts.colors.colorize`.
+ * [INPUT]: Depends on `argparse` (stdlib), `scripts.audit.cmd_audit`, `scripts.fix.cmd_fix`, `scripts.verify.cmd_verify`, `scripts.doctor.cmd_doctor`, `scripts.safe_dispatch.safe_dispatch`, `scripts.colors.colorize`.
  * [OUTPUT]: Provides `build_parser()`, `main(argv)`, console-script target `aisurface = scripts.cli:main`.
- * [POS]: Single CLI entry point. Dispatches to audit/fix/verify subcommands. Imported by `pyproject.toml`'s `[project.scripts]`.
+ * [POS]: Single CLI entry point. Dispatches to audit/fix/verify/doctor subcommands. Imported by `pyproject.toml`'s `[project.scripts]`.
  * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
 
-CLI entry point. Dispatches to audit/fix/verify subcommands.
+CLI entry point. Dispatches to audit/fix/verify/doctor subcommands.
 """
 from __future__ import annotations
 
@@ -18,6 +18,7 @@ _DISPATCH = {
     "audit": "scripts.audit.cmd_audit",
     "fix": "scripts.fix.cmd_fix",
     "verify": "scripts.verify.cmd_verify",
+    "doctor": "scripts.doctor.cmd_doctor",
 }
 
 
@@ -26,7 +27,7 @@ def build_parser() -> argparse.ArgumentParser:
         prog="aisurface",
         description="AI-search citation readiness for OSS projects.",
     )
-    subparsers = parser.add_subparsers(dest="command", required=True, metavar="{audit,fix,verify}")
+    subparsers = parser.add_subparsers(dest="command", required=True, metavar="{audit,fix,verify,doctor}")
 
     # audit subcommand
     audit_p = subparsers.add_parser("audit", help="Run 12-check GEO audit")
@@ -50,6 +51,17 @@ def build_parser() -> argparse.ArgumentParser:
                           help="Comma-separated platform names (perplexity,deepseek)")
     verify_p.add_argument("--baseline", action="store_true", help="Establish/reset baseline")
     verify_p.add_argument("--queries-file", help="Custom queries file (1 query per line)")
+
+    # doctor subcommand (v1.0.2)
+    doctor_p = subparsers.add_parser(
+        "doctor", help="Diagnose the local aisurface install"
+    )
+    doctor_p.add_argument("--json", action="store_true", help="JSON output")
+    doctor_p.add_argument("--no-color", action="store_true", help="Disable color output")
+    doctor_p.add_argument(
+        "--skip-network", action="store_true",
+        help="Skip the PyPI version check (offline / CI-no-network)",
+    )
 
     return parser
 

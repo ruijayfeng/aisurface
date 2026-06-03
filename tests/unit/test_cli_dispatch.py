@@ -20,7 +20,8 @@ def test_audit_subcommand_runs():
 def test_no_subcommand_shows_help():
     code, _, err = _run()
     assert code != 0
-    assert "audit" in err and "fix" in err and "verify" in err
+    for verb in ("audit", "fix", "verify", "doctor"):
+        assert verb in err, f"{verb} missing from help output"
 
 
 def test_fix_subcommand_dispatches_to_handler():
