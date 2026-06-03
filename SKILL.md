@@ -78,6 +78,7 @@ npx skills add ruijayfeng/aisurface
 | "诊断 / audit / 看看" | 调 `python -m scripts.cli audit <path>`(或 `aisurface audit <path>`,先确认 `aisurface` console script 在 PATH 里) |
 | "修 / fix / 改 README / 改 llms.txt / 加 Schema" | 调 `python -m scripts.cli fix <path> --dry-run` 先给用户看,用户同意后再 `--yes` 落地 |
 | "验证 / verify / AI 真的引用没" | 检查 `PERPLEXITY_API_KEY` 环境变量,缺了告诉用户去 https://perplexity.ai/account/api 拿;然后调 `python -m scripts.cli verify <path>` |
+| "装对没 / 为什么命令找不到 / 装坏了 / diagnose install / is my aisurface broken" | 调 `python -m scripts.cli doctor --no-color`。读输出,把 ✗ 行的 `→ ...` 提示直接转给用户。PyPI 显示有新版本(`⚠ ... available`)就追加一句"要不要 `pip install --upgrade aisurface`"。如果 `PERPLEXITY_API_KEY` 是 ⚠,提醒"以后用 `verify` 之前先设上"但**不强制**用户设 |
 | 路径没说清楚 | 问用户要,别假设 |
 | 多种意图(诊断+修+验证) | 按顺序做,每步都给用户看结果,问"继续?" |
 
