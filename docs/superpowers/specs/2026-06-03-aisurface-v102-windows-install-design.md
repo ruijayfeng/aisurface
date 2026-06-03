@@ -124,12 +124,12 @@ Each line uses one of three symbols:
 
 | # | Check | Pass criterion | Fail hint | Skip condition |
 |---|---|---|---|---|
-| 1 | Python ≥ 3.10 | `sys.version_info >= (3, 10)` | Current version + Python.org download link | Never skip |
+| 1 | Python ≥ 3.10 | `sys.version_info >= (3, 10)` | Current version + Python.org download link | **If Python < 3.10, doctor short-circuits with exit code 2 and does not run remaining checks** (see "Exit codes" below) |
 | 2 | `scripts` package importable | `import scripts.audit`, `import scripts.fix`, `import scripts.verify` all succeed | `pip install aisurface` (or `pip install -e .` for dev) | Never skip |
 | 3 | Console script on PATH | `shutil.which("aisurface") is not None` | "Use `python -m scripts.cli` instead" + "Add `<Scripts dir>` to PATH" with the actual path from `sysconfig` | Never skip |
 | 4 | Required deps | `import httpx`, `import jsonschema`, `import selectolax` all succeed | `pip install --force-reinstall aisurface` | Never skip |
 | 5 | Cache dir writable | `~/.aisurface/` exists, `os.access(W_OK)` true; create if missing | "Check permissions on `~/.aisurface/`, or set `AISURFACE_CACHE_DIR` to a writable path" | Never skip |
-| 6 | PyPI latest version | `httpx.get("https://pypi.org/pypi/aisurface/json", timeout=5)` succeeds, response `info.version` is parseable; warn if newer than installed | `pip install --upgrade aisurface` | Network error or timeout → warn, not fail |
+| 6 | PyPI latest version | `httpx.get("https://pypi.org/pypi/aisurface/json", timeout=5)` seconds; response `info.version` is parseable. **Version comparison rules:** installed == PyPI → pass (up to date); installed < PyPI → warn (`pip install --upgrade aisurface`); installed > PyPI → pass with note (you're on a pre-release or local build) | `pip install --upgrade aisurface` (only on the < case) | Network error or timeout → warn ("couldn't reach PyPI"), not fail |
 | 7 | Internet reachable | Implicit: check 6 succeeded | — | — |
 | 8 | `PERPLEXITY_API_KEY` env | `os.environ.get("PERPLEXITY_API_KEY")` is set and non-empty | "Get one at: https://perplexity.ai/account/api" | Never skip; always warn-only |
 
@@ -137,11 +137,28 @@ Each line uses one of three symbols:
 
 - `0` — all checks pass, or only warnings (network, PERPLEXITY_API_KEY)
 - `1` — at least one check failed
-- `2` — Python < 3.10 (doctor itself can't run; print version and exit)
+- `2` — Python < 3.10 (doctor itself can't run). Message format:
+  ```
+  ✗ Python 3.9.5 — aisurface needs >= 3.10
+    → Upgrade Python: https://www.python.org/downloads/
+  ```
+  No further checks are run. The version number in the message comes from `sys.version`.
 
 ## Flags
 
-- `--json` — machine-readable output (one JSON object per check, plus summary fields)
+- `--json` — machine-readable output. JSON shape:
+  ```json
+  {
+    "aisurface_version": "1.0.2",
+    "python_version": "3.14.5",
+    "checks": [
+      {"name": "python_version", "status": "pass", "message": "3.14.5 (need >= 3.10)", "fix_hints": []},
+      {"name": "scripts_importable", "status": "pass", "message": "aisurface 1.0.2 installed", "fix_hints": []},
+      {"name": "console_script_on_path", "status": "fail", "message": "not on PATH", "fix_hints": ["use 'python -m scripts.cli'", "add /c/.../Scripts to PATH"]}
+    ],
+    "summary": {"pass": 6, "fail": 1, "warn": 1, "exit_code": 1}
+  }
+  ```
 - `--no-color` — same as audit/fix
 - `--skip-network` — skip check 6, useful in offline / CI-no-network scenarios
 
@@ -163,12 +180,14 @@ Lightweight decorator that wraps each `cmd_*` handler. Catches 4 exception class
 
 ## The 4 wrapped exception classes
 
+All rewritten messages go to **stderr** (not stdout), so the CLI exit-code-1 contract is preserved and stdout remains clean for piping.
+
 | Exception | Detection | Rewritten message |
 |---|---|---|
 | `ModuleNotFoundError` | message contains `"scripts."` | `✗ aisurface 没装(或装错环境). 跑: pip install aisurface` |
-| `FileNotFoundError` | the exception was raised from accessing the user's `args.path` | `✗ 路径不存在: <path>. 检查下路径再试` |
+| `FileNotFoundError` | any (path always comes from `args.path` on the `args` namespace, so we include it in the message) | `✗ 路径不存在: {args.path}. 检查下路径再试` |
 | `UnicodeEncodeError` | any | `✗ 控制台编码有问题. 设 PYTHONUTF8=1 和 PYTHONIOENCODING=utf-8` |
-| `PermissionError` | message contains `~/.aisurface` (or `AISURFACE_CACHE_DIR` value) | `✗ 写不进 <cache dir>. 看权限,或设 AISURFACE_CACHE_DIR 改路径` |
+| `PermissionError` | message contains `~/.aisurface` or the `AISURFACE_CACHE_DIR` env value | `✗ 写不进 <cache dir>. 看权限,或设 AISURFACE_CACHE_DIR 改路径` |
 
 ## Not wrapped (intentional)
 
