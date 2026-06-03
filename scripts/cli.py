@@ -1,5 +1,5 @@
 """
- * [INPUT]: Depends on `argparse` (stdlib), `scripts.audit.cmd_audit`, `scripts.fix.cmd_fix`, `scripts.verify.cmd_verify`, `scripts.colors.colorize`.
+ * [INPUT]: Depends on `argparse` (stdlib), `scripts.audit.cmd_audit`, `scripts.fix.cmd_fix`, `scripts.verify.cmd_verify`, `scripts.safe_dispatch.safe_dispatch`, `scripts.colors.colorize`.
  * [OUTPUT]: Provides `build_parser()`, `main(argv)`, console-script target `aisurface = scripts.cli:main`.
  * [POS]: Single CLI entry point. Dispatches to audit/fix/verify subcommands. Imported by `pyproject.toml`'s `[project.scripts]`.
  * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
@@ -11,6 +11,8 @@ from __future__ import annotations
 import argparse
 import importlib
 import sys
+
+from scripts.safe_dispatch import safe_dispatch
 
 _DISPATCH = {
     "audit": "scripts.audit.cmd_audit",
@@ -65,7 +67,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     module_path, _, attr = target.rpartition(".")
     handler = getattr(importlib.import_module(module_path), attr)
-    return handler(args)
+    return safe_dispatch(handler)(args)
 
 
 if __name__ == "__main__":
