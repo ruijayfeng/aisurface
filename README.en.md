@@ -93,31 +93,33 @@ See [case-studies/ziwei-v100.md](./case-studies/ziwei-v100.md).
 You can verify the package end-to-end **without** Claude Code and **without** an AI platform API — `pip install aisurface` plus the bundled fixtures give you deterministic output.
 
 ```bash
-# 1) Install / upgrade to the latest PyPI release (should report 1.0.1)
+# 1) Install / upgrade to the latest PyPI release
 pip install --upgrade aisurface
-pip show aisurface                  # Version: 1.0.1
+python -m scripts.cli doctor --no-color  # expect: ✓ Python / ✓ scripts importable / ✓ cache writable
 
-# 2) The 3-verb CLI is wired up
-aisurface --help                    # expect {audit, fix, verify}
+# 2) The 4-verb CLI is wired up
+python -m scripts.cli --help              # expect {audit, fix, verify, doctor}
 
-# 3) Run a known-bad fixture — expect health 16/100, 4 sub-scores, all 12 checks rendered
-aisurface audit evals/fixtures/bad-readme-python-lib --no-color
+# 3) Run a known-bad fixture — expect health 16/100
+python -m scripts.cli audit evals/fixtures/bad-readme-python-lib --no-color
 
 # 4) Run the known-good fixture — expect 90+ (sanity check on the upper bound)
-aisurface audit evals/fixtures/perfect-readme-and-docs --no-color
+python -m scripts.cli audit evals/fixtures/perfect-readme-and-docs --no-color
 
 # 5) See what `fix` would write (no disk writes)
-aisurface fix evals/fixtures/bad-readme-python-lib --dry-run
+python -m scripts.cli fix evals/fixtures/bad-readme-python-lib --dry-run
 
 # 6) Run on your own project (numbers will differ from the fixtures — that's expected)
-aisurface audit /path/to/your/repo --no-color
+python -m scripts.cli audit /path/to/your/repo --no-color
 
 # 7) (Optional) Real citation verification — needs PERPLEXITY_API_KEY
 export PERPLEXITY_API_KEY=pplx-...
-aisurface verify /path/to/your/repo        # first run: stores baseline in ~/.aisurface/baselines/
+python -m scripts.cli verify /path/to/your/repo        # first run: stores baseline in ~/.aisurface/baselines/
 ```
 
-Steps 1-5 confirm the v1.0.1 package itself: no broken imports, no missing files, all three CLI verbs work. Step 6 is the real test — run it on an actual repo you maintain. Step 7 needs a paid API key, skip it if you don't have one.
+> **Note:** If your `aisurface` console script is on PATH (typical on macOS / Linux, or on Windows if you manually added it), then `aisurface audit ...` and `python -m scripts.cli audit ...` are **exactly the same call**. Pick whichever you prefer. On Windows the default is that `aisurface` is NOT on PATH, so the README uses `python -m scripts.cli` for cross-platform consistency.
+
+Steps 1-5 confirm the v1.0.2 package itself: no broken imports, no missing files, all four CLI verbs work. Step 6 is the real test — run it on an actual repo you maintain. Step 7 needs a paid API key, skip it if you don't have one.
 
 ## Installation
 
