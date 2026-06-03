@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.0.2] - 2026-06-03
+
+### Added
+- `aisurface doctor` subcommand — install-health self-check with 7 checks (Python version, scripts importable, console script on PATH, deps importable, cache dir writable, PyPI latest version [internet reachability is implicit in this check], `PERPLEXITY_API_KEY` set). Exits 0 / 1 / 2 (2 = Python < 3.10). `--json` for machine-readable output, `--skip-network` for offline use.
+- `safe_dispatch` decorator in `scripts/safe_dispatch.py` — wraps each `cmd_*` handler and converts 4 common user-facing exceptions (`ModuleNotFoundError` for `scripts.*`, `FileNotFoundError` on `args.path`, `UnicodeEncodeError`, `PermissionError` on the cache dir) into actionable one-line hints on stderr. Re-raises everything else.
+- CI matrix: 15 jobs (3 OS × 5 Python: 3.10, 3.11, 3.12, 3.13, 3.14), each running lint + pytest + a smoke test that exercises both `aisurface` and `python -m scripts.cli`. Replaces the single-job ubuntu+3.10 CI that was in v1.0.1.
+
+### Changed
+- `README.md` and `README.en.md` 5-min self-test now uses `python -m scripts.cli ...` as the primary command (works on all OS without PATH dependency). `aisurface ...` is mentioned as an equivalent alias for users on macOS/Linux.
+- `SKILL.md` tool dispatch table gained a new row mapping natural-language triggers ("装对没 / diagnose install / is my aisurface broken") to `python -m scripts.cli doctor`. No command name exposed to the user-facing sections (per spec §11b user-facing abstraction).
+- 35 new pytest tests (27 doctor, 8 safe_dispatch; 1 existing cli dispatch test extended to cover 4 verbs; 1 doctor smoke test in CI). Total 128 non-eval + 12 eval = 140 tests (up from 105 in v0.1.3).
+
+### Fixed
+- v1.0.1 packaging gap: Windows users following the 5-min self-test hit `aisurface: command not found` at step 2 because the `aisurface.exe` console script lives in `%APPDATA%\Python\Python3X\Scripts\` which isn't on Windows PATH. The README now defaults to `python -m scripts.cli` which works regardless of PATH.
+- Silent stale-version: a user who had v0.1.x installed and ran `pip install --upgrade aisurface` could end up on a stale version depending on environment resolution. `doctor` now checks PyPI and warns if a newer version is available.
+- `test_no_subcommand_shows_help` updated to assert all 4 subcommands (audit, fix, verify, doctor) appear in the help output.
+
 ## [1.0.1] - 2026-06-03
 
 ### Added
