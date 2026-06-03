@@ -2,6 +2,11 @@
 
 > Make your open-source project surface in AI search results.
 
+[![PyPI](https://img.shields.io/pypi/v/aisurface)](https://pypi.org/project/aisurface/)
+[![Python 3.10+](https://img.shields.io/pypi/pyversions/aisurface)](https://pypi.org/project/aisurface/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Tests](https://img.shields.io/badge/tests-105%20passing-brightgreen)](./tests)
+
 [English](./README.en.md) | [中文](./README.md)
 
 ```bash
@@ -19,6 +24,14 @@ After install, just say "audit my project" — the skill handles the Python envi
 ![audit](docs/screenshots/audit.png)
 ![fix](docs/screenshots/fix.png)
 ![verify](docs/screenshots/verify.png)
+
+## v1.0.1 released (2026-06-03)
+
+- **User-facing abstraction principle** (spec §11b): the skill surface exposes only capabilities, not command names like `aisurface audit` / `fix` / `verify`; triggers are natural language
+- **GEB fractal documentation system**: L1 (`CLAUDE.md`) / L2 (per-module `CLAUDE.md`) / L3 (`INPUT/OUTPUT/POS` headers in `scripts/*.py`) — three layers stay in sync
+- **Fixed**: L3 header `from __future__ import annotations` is back on line 1 (the L3 string block had been placed before the original docstring, and Python rejected any non-`__future__` string preceding a `__future__` import)
+
+Full changelog: [CHANGELOG.md](./CHANGELOG.md).
 
 aisurface is a Claude Code tool that helps **open-source project maintainers** get their projects **actively cited by AI search** (Doubao / DeepSeek / ChatGPT / Gemini / Claude / Perplexity / Kimi / Wenxin / Tongyi / GLM / ...).
 
@@ -74,6 +87,37 @@ We use [ruijayfeng/ziwei](https://github.com/ruijayfeng/ziwei) for v1.0 dogfoodi
 - **After applying 4 patches**: health score 87/100, all 🔴 cleared (+52)
 
 See [case-studies/ziwei-v100.md](./case-studies/ziwei-v100.md).
+
+## 5-minute self-test
+
+You can verify the package end-to-end **without** Claude Code and **without** an AI platform API — `pip install aisurface` plus the bundled fixtures give you deterministic output.
+
+```bash
+# 1) Install / upgrade to the latest PyPI release (should report 1.0.1)
+pip install --upgrade aisurface
+pip show aisurface                  # Version: 1.0.1
+
+# 2) The 3-verb CLI is wired up
+aisurface --help                    # expect {audit, fix, verify}
+
+# 3) Run a known-bad fixture — expect health 16/100, 4 sub-scores, all 12 checks rendered
+aisurface audit evals/fixtures/bad-readme-python-lib --no-color
+
+# 4) Run the known-good fixture — expect 90+ (sanity check on the upper bound)
+aisurface audit evals/fixtures/perfect-readme-and-docs --no-color
+
+# 5) See what `fix` would write (no disk writes)
+aisurface fix evals/fixtures/bad-readme-python-lib --dry-run
+
+# 6) Run on your own project (numbers will differ from the fixtures — that's expected)
+aisurface audit /path/to/your/repo --no-color
+
+# 7) (Optional) Real citation verification — needs PERPLEXITY_API_KEY
+export PERPLEXITY_API_KEY=pplx-...
+aisurface verify /path/to/your/repo        # first run: stores baseline in ~/.aisurface/baselines/
+```
+
+Steps 1-5 confirm the v1.0.1 package itself: no broken imports, no missing files, all three CLI verbs work. Step 6 is the real test — run it on an actual repo you maintain. Step 7 needs a paid API key, skip it if you don't have one.
 
 ## Installation
 
