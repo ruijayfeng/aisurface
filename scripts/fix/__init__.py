@@ -1,3 +1,10 @@
+"""
+ * [INPUT]: Depends on `scripts.scanner.scan_repo`, the four patch generators in this package (`fix.faq`, `fix.when_to_use`, `fix.llms_txt`, `fix.schema_org`), and `argparse` args (`--path`, `--only`, `--dry-run`, `--yes`).
+ * [OUTPUT]: Provides `Patch` dataclass (patch_type, target_file, new_content, is_new_file, description) and `cmd_fix(args) -> int` (CLI dispatch target for the `fix` subcommand). Iterates generators, prints summary, prompts for apply (or skips on `--yes`/`--dry-run`).
+ * [POS]: Fix subcommand core. Imported by `cli.py`. Dispatcher layer that sits above the four single-purpose patch generators.
+ * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
+"""
+
 """Fix subcommand: generate and apply patches."""
 from __future__ import annotations
 

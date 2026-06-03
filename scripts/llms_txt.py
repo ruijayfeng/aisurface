@@ -1,3 +1,10 @@
+"""
+ * [INPUT]: Depends on `pathlib`, `typing.TypedDict` (stdlib).
+ * [OUTPUT]: Provides `Link`, `Section` TypedDicts; `build_llms_txt(project_name, description, sections, details) -> str`; `write_llms_txt(repo_root, project_name, description, sections, details) -> Path`.
+ * [POS]: llms.txt generation per https://llmstxt.org. Used by the audit verb's check #6 (to test if file exists) and by `fix/llms_txt.py` to generate the file.
+ * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
+"""
+
 """Generate and validate .well-known/llms.txt per the llms.txt spec."""
 from __future__ import annotations
 

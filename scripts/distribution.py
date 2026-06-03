@@ -1,3 +1,10 @@
+"""
+ * [INPUT]: Depends on `scripts.scanner.RepoAssets`, `scripts.report.CheckResult`.
+ * [OUTPUT]: Provides `distribution_check(assets) -> CheckResult` for check #11 (awesome-list / npm / PyPI presence).
+ * [POS]: Distribution-signal heuristic. Imported by `audit.run_audit`. Pure function over `RepoAssets` — no network.
+ * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
+"""
+
 """Evaluate distribution signals (awesome-lists, npm, PyPI, stars)."""
 from __future__ import annotations
 

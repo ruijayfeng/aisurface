@@ -1,3 +1,10 @@
+"""
+ * [INPUT]: Depends on `scripts.scanner.scan_repo`, `scripts.critic.offline_critique`, `scripts.github_meta`, `scripts.distribution`, `scripts.llms_txt`, `scripts.schema_gen`, `scripts.findings.StructuralFinding`, `scripts.safe_check.safe_check`, `scripts.report.AuditReport`, `scripts.report.render_report`.
+ * [OUTPUT]: Provides `run_audit(repo_root, *, teacher_mode, llm_critique) -> AuditReport` and `cmd_audit(args) -> int` (CLI dispatch target). Orchestrates 12 structural + semantic checks, computes the 40/30/20/10 weighted score, and renders the markdown report.
+ * [POS]: Audit subcommand core. Imported by `cli.py` and exercised by `tests/unit/test_audit.py` + `tests/integration/test_full_audit.py`. Sits between the scanner (input) and the reporter (output).
+ * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
+"""
+
 """Audit subcommand: run the 12-check GEO audit and render the report."""
 from __future__ import annotations
 

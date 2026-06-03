@@ -1,3 +1,10 @@
+"""
+ * [INPUT]: Depends on `scripts.report.CheckResult` (parent class).
+ * [OUTPUT]: Provides `StructuralFinding(CheckResult)` dataclass with extra `file_path: Path | None` field.
+ * [POS]: Subclass of `CheckResult` used by structural checks (e.g., Schema.org, llms.txt, GitHub topics) that need to point at a specific file. Imported lazily by `report.py` to avoid a circular import.
+ * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
+"""
+
 """Typed result subclasses for audit checks."""
 from __future__ import annotations
 

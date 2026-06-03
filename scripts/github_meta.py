@@ -1,3 +1,10 @@
+"""
+ * [INPUT]: Depends on `subprocess` (stdlib, shells out to `gh` CLI), `scripts.report.CheckResult`.
+ * [OUTPUT]: Provides `github_topics_count(repo_root) -> int`, `github_repo_description(repo_root) -> str | None`, and a CheckResult for check #7.
+ * [POS]: GitHub-specific data source. Used by `audit.run_audit` to score check #7 (GitHub topics count). Skipped (returns CheckResult with `skipped=True`) if `gh` CLI is unavailable.
+ * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
+"""
+
 """Suggest GitHub topics and evaluate repo descriptions."""
 from __future__ import annotations
 

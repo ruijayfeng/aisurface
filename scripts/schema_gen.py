@@ -1,3 +1,10 @@
+"""
+ * [INPUT]: Depends on `typing.Any` (stdlib).
+ * [OUTPUT]: Provides `build_software_application(name, description, url, *, application_category, operating_system, offers, author) -> dict[str, Any]`; `build_faq_page(questions) -> dict[str, Any]`.
+ * [POS]: Schema.org JSON-LD builder. Used by the audit verb's check #5 (to test if a schema file exists) and by `fix/schema_org.py` to produce `index.schema.json`.
+ * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
+"""
+
 """Generate and validate Schema.org JSON-LD for OSS projects."""
 from __future__ import annotations
 

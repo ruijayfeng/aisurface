@@ -1,3 +1,10 @@
+"""
+ * [INPUT]: Depends on stdlib only.
+ * [OUTPUT]: Provides `PRIMERS: dict[int, str]` (12 check-id → 1-2 sentence primer), `get_primer(check_id) -> str`.
+ * [POS]: Knowledge layer for `--learn` teacher mode. Imported lazily by `report._format_check_line` only when `teacher_mode=True`.
+ * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
+"""
+
 """Short educational primers for the 12 GEO checks, used by --learn teacher mode.
 
 Each primer is 1-2 sentences: factual, terse, educational. Not marketing copy.

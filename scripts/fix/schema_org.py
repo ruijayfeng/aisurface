@@ -1,3 +1,10 @@
+"""
+ * [INPUT]: Depends on `pathlib.Path`, `json`, `scripts.scanner.scan_repo`, `scripts.schema_gen.build_software_application`, `scripts.schema_gen.build_faq_page`, the README file at the repo root.
+ * [OUTPUT]: Provides `generate_schema_org_patch(repo_root) -> Patch | None`. If `index.schema.json` already exists, returns None. Otherwise returns a `Patch` writing a `SoftwareApplication` (+ `FAQPage` if a `## FAQ` section is detected) JSON-LD object.
+ * [POS]: One of the four `fix` patch generators. Imported lazily by `fix.cmd_fix`. Targets check #5 (Schema.org presence) in the audit. Composes with `scripts/schema_gen.py` (the shared builder).
+ * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
+"""
+
 """Schema.org patch: generates index.schema.json with SoftwareApplication + FAQPage."""
 from __future__ import annotations
 

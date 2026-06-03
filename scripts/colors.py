@@ -1,3 +1,10 @@
+"""
+ * [INPUT]: Depends on `os` (reads `NO_COLOR` env var), `sys` (detects TTY).
+ * [OUTPUT]: Provides `colorize(text, color) -> str` — wraps text in ANSI codes; returns text unchanged if `NO_COLOR=1` or stdout is not a TTY.
+ * [POS]: Presentation layer. Imported by `cli.py` and `audit.py` to color the rendered report. The `wrap=` parameter in `report.render_report` is this function by convention.
+ * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
+"""
+
 """ANSI color helpers for the CLI.
 
 Auto-detection respects:

@@ -1,3 +1,10 @@
+"""
+ * [INPUT]: Depends on `pathlib.Path`, `scripts.scanner.scan_repo`, the README file at the repo root.
+ * [OUTPUT]: Provides `generate_when_to_use_patch(repo_root) -> Patch | None`. If both `## When to use` and `## When NOT to use` already exist, returns None. Otherwise returns a `Patch` adding both sections with templated bullet placeholders for the user to fill in.
+ * [POS]: One of the four `fix` patch generators. Imported lazily by `fix.cmd_fix`. Targets check #3 (when-to-use) and check #9 (when-NOT-to-use) in the audit.
+ * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
+"""
+
 """When-to-use stub patch: adds 'When to use' + 'When NOT to use' sections."""
 from __future__ import annotations
 
