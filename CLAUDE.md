@@ -15,7 +15,7 @@
 ```
 aisurface/
 ├── SKILL.md              - Unified skill definition (name: aisurface), single user-facing surface
-├── scripts/              - Python implementation (cli, audit, report, fix/, verify/, scanner, ...)
+├── scripts/              - Python implementation (cli, audit, report, fix/, verify/, scanner, doctor, safe_dispatch, ...)
 ├── skills/
 │   └── _deprecated/      - v0.1.x sub-skills (aisurface-readme, aisurface-llms-txt) — will be removed in v1.1
 ├── tests/                - pytest suite (unit/ + integration/)
