@@ -28,6 +28,7 @@ aisurface/
 │   │   └── specs/        - Specs (v1.0 design, etc.)
 │   └── (user-facing docs land here)
 ├── .github/              - CI workflow + issue/PR templates
+├── CONTRIBUTING.md       - Contributor guide (Python CLI usage, dev setup, new-check howto)
 └── CLAUDE.md             - This file (L1)
 ```
 
@@ -35,7 +36,8 @@ aisurface/
 - `pyproject.toml` — package metadata, deps, console script `aisurface = scripts.cli:main`, pytest/ruff config
 - `ROADMAP.md` — release sequence (v0.1.0 → v1.0)
 - `CHANGELOG.md` — release notes
-- `README.md` / `README.en.md` — bilingual project README (lead with `npx skills add` + natural-language demo)
+- `README.md` / `README.en.md` — bilingual project README (skill-first: lead with `npx skills add` + natural-language demo; no CLI in user-facing surface)
+- `CONTRIBUTING.md` — contributor guide (issue/PR, dev setup, adding new checks, Python CLI usage for CI / automation)
 - `SKILL.md` — root skill descriptor (unified `aisurface`)
 
 ## Active Specs & Plans
