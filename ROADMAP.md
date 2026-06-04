@@ -32,6 +32,28 @@ aisurface verify ./        # prove: probe AI platforms for citation rate
 | v0.1.4 (optional) | `--llm` flag — swap regex critic for real LLM | ⏳ optional |
 | v1.1.0 | Remove `skills/_deprecated/` (one release deprecation cycle complete); add more platform adapters per real-user signal | ⏳ planned |
 
+## Platform Coverage
+
+**Currently shipped (v1.0.x):**
+- **Perplexity** — `verify` uses the real Perplexity API (requires `PERPLEXITY_API_KEY`)
+
+**Diagnose + Treat are platform-agnostic:** they check what every AI engine looks for (README structure, `llms.txt`, Schema.org, FAQ, when-to-use, code examples), so they help regardless of which AI your users actually use.
+
+**On the v1.1+ roadmap:**
+- ChatGPT (OpenAI)
+- Claude (Anthropic)
+- Gemini (Google)
+- DeepSeek
+- 豆包 (Doubao)
+- 文心一言 (Baidu)
+- 通义千问 (Alibaba)
+- Kimi (Moonshot)
+- 智谱 / GLM
+
+**Why slow?** Real-platform citation probing is per-API cost + per-API rate-limit + per-API contract. Each adapter takes ~1-2 weeks. We ship a v1.0 that's honest about one platform rather than claim ten and deliver one.
+
+See "Future (v1.1+, not committed)" below for the trigger criteria that moves a platform from "roadmap" to "shipped".
+
 ## Architecture Principles (from spec §11b)
 
 - **Skill-first install.** The primary user entry point is `npx skills add ruijayfeng/aisurface`. `pip install aisurface` is an implementation detail handled by the skill at first invocation.

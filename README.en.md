@@ -46,7 +46,7 @@ Existing skills (`seo-audit`, `seo-geo`) only diagnose URL-perspective English G
 
 **🩺 Diagnose** — scan your project, give a 0-100 score, surface the issues that most affect AI citation
 **🔧 Treat** — auto-generate patches per AI-search best practices: edit your README, generate `llms.txt`, generate Schema.org markup
-**📊 Prove** — actually ask the AI platforms "did you cite my project?"; show real numbers and how much they improved since the last run
+**📊 Prove** — actually ask Perplexity "did you cite my project?"; show real numbers and how much they improved since the last run (more platforms on the v1.1+ roadmap — see [ROADMAP.md](./ROADMAP.md))
 
 ## How to talk to me
 
@@ -86,7 +86,7 @@ agent invokes Python scripts for diagnose / treat / prove
 results come back in plain language + key numbers (0-100 score, impact %, citation rate)
 ```
 
-Diagnose gives a 0-100 score, ordered by impact — the top 3-5 items first. Treat shows you the patches and waits for your nod before writing to disk. Prove uses real platforms (Perplexity and friends) and diffs against a stored baseline.
+Diagnose gives a 0-100 score, ordered by impact — the top 3-5 items first. Treat shows you the patches and waits for your nod before writing to disk. Prove uses Perplexity and diffs against a stored baseline. More platforms (ChatGPT / Claude / Gemini / DeepSeek / Doubao / 文心一言 / 通义千问 / Kimi / 智谱 / GLM) on the v1.1+ roadmap — see [ROADMAP.md](./ROADMAP.md).
 
 ## Case study
 

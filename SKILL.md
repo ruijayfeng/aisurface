@@ -1,11 +1,11 @@
 ---
 name: aisurface
-description: 'Use when an open-source project maintainer wants their project to surface in AI search results across ChatGPT, Perplexity, Claude, Gemini, 豆包, DeepSeek, 文心一言, 通义千问, Kimi, 智谱, GLM. Triggers on any of: "audit my project for AI search", "is my project AI-citation-friendly", "GEO audit", "improve AI discoverability", "make my project AI-search-ready", "does my project show up in AI search", "fix my README for ChatGPT", "AI 搜索能不能搜到我的项目", "诊断我的项目 GEO", "按 AI 搜索最佳实践改 README", "AI 真的引用我项目了吗", "verify AI platform citation rate", or any request to improve a GitHub repo''s citation-friendliness. Even if the user only mentions one concern (e.g., "我的项目 ChatGPT 搜不到" or "我的 README 写得不好") this skill applies. Do NOT trigger for: general questions about what GEO is, questions about closed-source or marketing sites, or SEO for non-AI-search engines.'
+description: 'Use when an open-source project maintainer wants their project to surface in AI search results. Diagnose and treat work for any AI engine; Prove currently uses Perplexity only — broader platform coverage (ChatGPT / Claude / Gemini / 豆包 / DeepSeek / 文心一言 / 通义千问 / Kimi / 智谱 / GLM) is on the v1.1+ roadmap (see ROADMAP.md). Triggers on any of: "audit my project for AI search", "is my project AI-citation-friendly", "GEO audit", "improve AI discoverability", "make my project AI-search-ready", "does my project show up in AI search", "fix my README for ChatGPT", "AI 搜索能不能搜到我的项目", "诊断我的项目 GEO", "按 AI 搜索最佳实践改 README", "AI 真的引用我项目了吗", "verify AI platform citation rate", or any request to improve a GitHub repo''s citation-friendliness. Even if the user only mentions one concern (e.g., "我的项目 ChatGPT 搜不到" or "我的 README 写得不好") this skill applies. Do NOT trigger for: general questions about what GEO is, questions about closed-source or marketing sites, or SEO for non-AI-search engines.'
 ---
 
 # aisurface
 
-帮你的开源项目在 AI 搜索结果里浮到表面(ChatGPT / Perplexity / Claude / Gemini / 豆包 / DeepSeek / 文心一言 / 通义千问 / Kimi / 智谱 / GLM)。
+帮你的开源项目在 AI 搜索结果里浮到表面。目前通过 Perplexity 验证引用率;ChatGPT / Claude / Gemini / 豆包 / DeepSeek / 文心一言 / 通义千问 / Kimi / 智谱 / GLM 等平台覆盖见 [ROADMAP.md](./ROADMAP.md) 路线图。
 
 不管你说"诊断"、"修"、"验证",还是直接说大白话,这件事就找我。
 
