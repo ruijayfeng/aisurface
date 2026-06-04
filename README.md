@@ -102,6 +102,7 @@ issue / PR / case study 都欢迎。
 
 - 想贡献代码 / 加新检查 / 跑本地测试 → [CONTRIBUTING.md](./CONTRIBUTING.md)
 - 不用 Claude Code 直接调 Python 脚本(CI / 自动化)→ [CONTRIBUTING.md#用-python-cli](./CONTRIBUTING.md)
+- 常见问题(GEO 是什么、跟 SEO 区别、verify 准不准、为啥只 Perplexity)→ [docs/FAQ.md](./docs/FAQ.md)
 
 ## License
 

@@ -23,10 +23,11 @@ aisurface/
 ├── references/           - Knowledge base (AI platforms, schema templates, GEO checklist, llms.txt spec)
 ├── case-studies/         - Real-world before/after (ziwei is the canonical case)
 ├── docs/
+│   ├── FAQ.md            - 4 common questions (what is GEO / vs SEO / verify accuracy / why Perplexity)
 │   ├── superpowers/
 │   │   ├── plans/        - Implementation plans (this plan + the v1.0 plan)
 │   │   └── specs/        - Specs (v1.0 design, etc.)
-│   └── (user-facing docs land here)
+│   └── (more user-facing docs land here)
 ├── .github/              - CI workflow + issue/PR templates
 ├── CONTRIBUTING.md       - Contributor guide (Python CLI usage, dev setup, new-check howto)
 └── CLAUDE.md             - This file (L1)

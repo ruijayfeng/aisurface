@@ -102,6 +102,7 @@ Issues, PRs, and case studies welcome.
 
 - Contributing code / adding a new check / running tests locally → [CONTRIBUTING.md](./CONTRIBUTING.md)
 - Using the Python CLI directly (CI / automation, no Claude Code) → [CONTRIBUTING.md#using-the-python-cli](./CONTRIBUTING.md)
+- Common questions (what is GEO, vs SEO, `verify` accuracy, why only Perplexity) → [docs/FAQ.md](./docs/FAQ.md)
 
 ## License
 
