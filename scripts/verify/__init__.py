@@ -41,8 +41,11 @@ def _print_cost_warning(platforms: list[str], n_queries: int) -> None:
 
 
 def _truncate_queries(queries: list[str], max_queries: int | None) -> list[str]:
-    """Truncate queries to max_queries. Prints a stderr message when truncating."""
-    if max_queries is None or len(queries) <= max_queries:
+    """Truncate queries to max_queries. Prints a stderr message when truncating.
+
+    Non-int values (e.g. MagicMock in tests) are treated as no-limit.
+    """
+    if not isinstance(max_queries, int) or max_queries <= 0 or len(queries) <= max_queries:
         return queries
     print(
         f"[verify] --max-queries={max_queries} truncates from {len(queries)} queries",

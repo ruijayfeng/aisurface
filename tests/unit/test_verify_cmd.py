@@ -1,6 +1,8 @@
 """Unit tests for verify subcommand helpers (cost warning, query truncation)."""
 from __future__ import annotations
 
+from unittest.mock import MagicMock
+
 from scripts.verify import _print_cost_warning, _truncate_queries
 from scripts.verify.perplexity import PERPLEXITY_COST_PER_QUERY_USD
 
@@ -51,4 +53,16 @@ def test_truncate_queries_under_limit_passes_through(capsys):
     result = _truncate_queries(["a", "b"], 5)
     captured = capsys.readouterr()
     assert result == ["a", "b"]
+    assert captured.err == ""
+
+
+def test_truncate_queries_non_int_means_no_limit(capsys):
+    """Non-int max_queries (e.g. MagicMock in integration tests) is treated as no-limit.
+
+    Regression: integration tests pass MagicMock() for args, so args.max_queries
+    is a MagicMock — must not crash with TypeError.
+    """
+    result = _truncate_queries(["a", "b", "c"], MagicMock())
+    captured = capsys.readouterr()
+    assert result == ["a", "b", "c"]
     assert captured.err == ""
