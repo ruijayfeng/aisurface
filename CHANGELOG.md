@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3] - 2026-06-04 (GitHub only — docs-only, not on PyPI)
+
+### Changed
+- `README.md` and `README.en.md`: full skill-first rewrite. `npx skills add ruijayfeng/aisurface` is the lead; `pip install` reframed as the skill's auto-install detail. CLI usage, 3-step workflow, 5-minute self-test, and the 12-check audit table all moved to `CONTRIBUTING.md`.
+- `CONTRIBUTING.md`: new "Using the Python CLI (without Claude Code)" section — `aisurface audit` / `fix` / `verify` for CI and automation use, plus the developer-side `scripts/` map.
+- `CLAUDE.md` (L1): directory tree and config-files list now include `CONTRIBUTING.md`.
+
 ## [1.0.2] - 2026-06-03
 
 ### Added
