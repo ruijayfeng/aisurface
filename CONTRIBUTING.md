@@ -17,7 +17,7 @@
 
 1. Fork → 改 → PR
 2. 一个 PR 一个改动
-3. 所有 PR 必须过 CI(ruff + pytest 128 + 12 = 140)
+3. 所有 PR 必须过 CI(ruff + pytest 145 + 12 = 157)
 4. 添加测试覆盖你的改动
 
 ## 提 case study / Submitting a case study

@@ -7,7 +7,7 @@
 - `evals/` (NOTE: this is a different directory — the eval fixtures live at `/evals/`, not under tests).
 
 ## Invariants
-- 128 non-eval + 12 eval = 140 tests passing as of v1.0.2.
+- 145 non-eval + 12 eval = 157 tests passing as of v1.0.3.
 - Marker `eval` is defined in `pyproject.toml`; deselect with `pytest -m "not eval"`.
 - Every new `scripts/*.py` file must have a corresponding `tests/unit/test_<name>.py`.
 

@@ -5,7 +5,7 @@
 [![PyPI](https://img.shields.io/pypi/v/aisurface)](https://pypi.org/project/aisurface/)
 [![Python 3.10+](https://img.shields.io/pypi/pyversions/aisurface)](https://pypi.org/project/aisurface/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://img.shields.io/badge/tests-140%20passing-brightgreen)](./tests)
+[![Tests](https://img.shields.io/badge/tests-157%20passing-brightgreen)](./tests)
 
 English | [中文](./README.md)
 
