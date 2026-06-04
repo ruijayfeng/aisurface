@@ -29,7 +29,7 @@ aisurface verify ./        # prove: probe AI platforms for citation rate
 | **v1.0.0** | **Consolidate 3 skills → 1 unified `aisurface` skill, PyPI publish, screenshots, ziwei re-dogfood** | ✅ shipped 2026-06-02 |
 | **v1.0.1** | **Skill abstraction principle — single natural-language-facing SKILL.md, GEB fractal docs (L1/L2/L3), §11b in spec, skill-first install story across README/ROADMAP** | ✅ shipped 2026-06-03 |
 | **v1.0.2** | **Windows install / PATH hotfix — `aisurface doctor` self-check + `safe_dispatch` error wrapper + 15-job CI matrix (3 OS × 5 Python). README 5-min self-test now uses `python -m scripts.cli` (cross-platform).** | ✅ shipped 2026-06-03 |
-| v0.1.4 (optional) | `--llm` flag — swap regex critic for real LLM | ⏳ optional |
+| v0.1.4 (KILLED) | `--llm` flag — killed 2026-06-04. Decision: rely on Claude Code agent's LLM for semantic checks instead of adding a separate LLM call to the Python script. | ❌ killed 2026-06-04 |
 | v1.1.0 | Remove `skills/_deprecated/` (one release deprecation cycle complete); add more platform adapters per real-user signal | ⏳ planned |
 
 ## Platform Coverage
@@ -66,7 +66,7 @@ Killed from the original 2026-06-01 spec (which planned 8 skills + MCP + 4 platf
 - ❌ `@schema` `@docs` `@landing-page` as standalone skills — patch targets inside `fix`
 - ❌ MCP server — CLI already invocable from Claude Code
 - ❌ 4-platform probe — start with 1-2 (Perplexity + DeepSeek)
-- ❌ Real LLM critic as default — opt-in `--llm` flag only
+- ❌ Real LLM critic in the Python script (default or opt-in) — the Claude Code agent already has LLM access for semantic checks; adding a second LLM call in the script is redundant + adds dep weight
 - ❌ "Skill collection" model — 1 binary, 3 subcommands
 
 See v1.0 spec §4 for the full kill list and rationale.
