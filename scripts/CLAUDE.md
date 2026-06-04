@@ -28,8 +28,8 @@
 - `fix/schema_org.py`: Wraps `schema_gen.py` for the fix context.
 
 ## Pending (v0.1.3 — verify verb)
-- `verify/__init__.py`: `ProbeAdapter` Protocol + `ProbeResult` dataclass + `cmd_verify` dispatcher.
-- `verify/perplexity.py`: `PerplexityAdapter` over httpx.
+- `verify/__init__.py`: `ProbeAdapter` Protocol + `ProbeResult` dataclass + `cmd_verify` dispatcher. Helpers `_print_cost_warning(platforms, n_queries)` (Perplexity cost estimate, silent for non-Perplexity platforms) and `_truncate_queries(queries, max_queries)` (caps query count for cost control). Reads `--max-queries` from args.
+- `verify/perplexity.py`: `PerplexityAdapter` over httpx. Exports `PERPLEXITY_COST_PER_QUERY_USD = 0.008` constant for the cost-warning helper.
 - `verify/queries.py`: Per-project-type query template generator.
 - `verify/baseline.py`: File-backed `BaselineStore` at `~/.aisurface/baselines/<hash>/<platform>.json` + `diff_summary`.
 

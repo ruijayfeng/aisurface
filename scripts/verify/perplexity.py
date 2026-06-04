@@ -14,6 +14,10 @@ from scripts.verify import ProbeResult
 
 PERPLEXITY_URL = "https://api.perplexity.ai/chat/completions"
 DEFAULT_MODEL = "sonar-pro"
+# Approximate per-query cost for `sonar-pro` (~$3/M input + ~$15/M output tokens,
+# ~100 input + ~500 output tokens per query). Used by verify cost warning only —
+# actual billed amount may differ. Update when Perplexity pricing changes.
+PERPLEXITY_COST_PER_QUERY_USD = 0.008
 
 
 class PerplexityAPIError(RuntimeError):

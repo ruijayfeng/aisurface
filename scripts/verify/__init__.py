@@ -1,6 +1,6 @@
 """
- * [INPUT]: Depends on `scripts.scanner.scan_repo`, `scripts.verify.queries.generate_queries`, `scripts.verify.perplexity.PerplexityAdapter`, `scripts.verify.baseline.BaselineStore`, `argparse` args (`--path`, `--platforms`, `--baseline`, `--queries-file`).
- * [OUTPUT]: Provides `ProbeResult` dataclass (platform, query, cited, sources) and `cmd_verify(args) -> int` (CLI dispatch target for the `verify` subcommand). Generates queries, probes each platform, loads/stores baseline, prints diff_summary.
+ * [INPUT]: Depends on `scripts.scanner.scan_repo`, `scripts.verify.queries.generate_queries`, `scripts.verify.perplexity.PerplexityAdapter`, `scripts.verify.perplexity.PERPLEXITY_COST_PER_QUERY_USD`, `scripts.verify.baseline.BaselineStore`, `argparse` args (`--path`, `--platforms`, `--baseline`, `--queries-file`, `--max-queries`).
+ * [OUTPUT]: Provides `ProbeResult` dataclass (platform, query, cited, sources), `ProbeAdapter` Protocol, `cmd_verify(args) -> int` (CLI dispatch target for the `verify` subcommand), and helpers `_print_cost_warning(platforms, n_queries)` + `_truncate_queries(queries, max_queries)`. Generates queries, prints cost estimate, truncates by `--max-queries`, probes each platform, loads/stores baseline, prints diff_summary.
  * [POS]: Verify subcommand core. Imported by `cli.py`. Dispatcher layer that sits above the per-platform adapters, the query generator, and the baseline store.
  * [PROTOCOL]: Update this header when changed, then check CLAUDE.md
 
@@ -26,6 +26,29 @@ class ProbeResult:
 @runtime_checkable
 class ProbeAdapter(Protocol):
     def probe(self, query: str) -> ProbeResult: ...
+
+
+def _print_cost_warning(platforms: list[str], n_queries: int) -> None:
+    """Print estimated Perplexity cost to stdout. Silent for non-Perplexity platforms."""
+    from scripts.verify.perplexity import PERPLEXITY_COST_PER_QUERY_USD
+    if "perplexity" not in platforms:
+        return
+    est_total = n_queries * PERPLEXITY_COST_PER_QUERY_USD
+    print(
+        f"[verify] this run = {n_queries} Perplexity queries × "
+        f"~${PERPLEXITY_COST_PER_QUERY_USD:.4f} ≈ ${est_total:.2f}"
+    )
+
+
+def _truncate_queries(queries: list[str], max_queries: int | None) -> list[str]:
+    """Truncate queries to max_queries. Prints a stderr message when truncating."""
+    if max_queries is None or len(queries) <= max_queries:
+        return queries
+    print(
+        f"[verify] --max-queries={max_queries} truncates from {len(queries)} queries",
+        file=sys.stderr,
+    )
+    return queries[:max_queries]
 
 
 def cmd_verify(args) -> int:
@@ -54,7 +77,10 @@ def cmd_verify(args) -> int:
             project_type=assets.project_type or "generic",
         )
 
+    queries = _truncate_queries(queries, getattr(args, "max_queries", None))
+
     platforms = [p.strip() for p in args.platforms.split(",") if p.strip()]
+    _print_cost_warning(platforms, len(queries))
     overall_rc = 0
     for platform_name in platforms:
         adapter = _load_adapter(platform_name, project_url=project_url)

@@ -48,9 +48,11 @@ def build_parser() -> argparse.ArgumentParser:
     verify_p = subparsers.add_parser("verify", help="Probe AI platforms for citation rate")
     verify_p.add_argument("path", nargs="?", default=".", help="Repo root (default: cwd)")
     verify_p.add_argument("--platforms", default="perplexity",
-                          help="Comma-separated platform names (perplexity,deepseek)")
+                          help="Comma-separated platform names (currently: perplexity)")
     verify_p.add_argument("--baseline", action="store_true", help="Establish/reset baseline")
     verify_p.add_argument("--queries-file", help="Custom queries file (1 query per line)")
+    verify_p.add_argument("--max-queries", type=int, default=None,
+                          help="Cap the number of queries run (cost control)")
 
     # doctor subcommand (v1.0.2)
     doctor_p = subparsers.add_parser(
