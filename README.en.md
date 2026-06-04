@@ -104,6 +104,20 @@ Issues, PRs, and case studies welcome.
 - Using the Python CLI directly (CI / automation, no Claude Code) → [CONTRIBUTING.md#using-the-python-cli](./CONTRIBUTING.md)
 - Common questions (what is GEO, vs SEO, `verify` accuracy, why only Perplexity) → [docs/FAQ.md](./docs/FAQ.md)
 
+## Looking for co-maintainers
+
+`aisurface` is currently maintained by a single person. To grow past v1.0
+into a sustainable project, I'm looking for co-maintainers who can help
+with:
+
+- **Code review** — the GEO-check rubric and platform-adapter implementations
+- **Issue triage** — keeping the 18 trigger-eval fixtures passing + triaging real-user bug reports
+- **Non-English docs** — README is bilingual (zh + en); ROADMAP / CHANGELOG / CONTRIBUTING are English-only today
+- **Real-platform signal** — if you have access to ChatGPT / Claude / Gemini / DeepSeek APIs, real-user citation data directly informs the v1.1+ platform roadmap
+
+If you're interested, open an issue with the `help-wanted` label or
+ping me in the project discussion.
+
 ## License
 
 MIT

@@ -104,6 +104,17 @@ issue / PR / case study 都欢迎。
 - 不用 Claude Code 直接调 Python 脚本(CI / 自动化)→ [CONTRIBUTING.md#用-python-cli](./CONTRIBUTING.md)
 - 常见问题(GEO 是什么、跟 SEO 区别、verify 准不准、为啥只 Perplexity)→ [docs/FAQ.md](./docs/FAQ.md)
 
+## 找 co-maintainer
+
+目前维护者就一个人。要从 v1.0 长成一个能持续维护的项目,我在找 co-maintainer,帮以下几类活:
+
+- **Code review** — GEO 检查项的合理性和平台 adapter 的实现
+- **Issue triage** — 18 个 trigger-eval 跑通 + 真用户 bug 报告分类
+- **非英语文档** — README 中英双语,其他文档(ROADMAP/CHANGELOG/CONTRIBUTING)目前只英文
+- **真平台信号** — 如果你手上有 ChatGPT / Claude / Gemini / DeepSeek 等 API 访问,真用户引用数据能直接帮 v1.1+ 平台路线图定优先级
+
+有意向开 issue 选 `help-wanted` label,或者直接到 discussion 板块说一声。
+
 ## License
 
 MIT
