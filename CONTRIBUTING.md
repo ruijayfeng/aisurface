@@ -20,6 +20,17 @@
 3. 所有 PR 必须过 CI(ruff + pytest 128 + 12 = 140)
 4. 添加测试覆盖你的改动
 
+## 提 case study / Submitting a case study
+
+跑完 `audit` / `fix` 在自己项目上,如果有值得分享的数据(+10 分、specific patch 帮上忙、踩到坑)——
+
+1. 复制 [`case-studies/_template.md`](./case-studies/_template.md)
+2. 填你自己的项目名 + 数字
+3. PR 到 `case-studies/<your-slug>.md`
+4. 顺手在 README 的 "实战案例" 段加一行(可选)
+
+参考:[ziwei-v100.md](./case-studies/ziwei-v100.md) 是 v1.0 dogfood 完整样本。
+
 ## 开发环境
 
 ```bash
